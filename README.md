@@ -4,15 +4,15 @@
 This app use passport for authenticate users. See more info `http://www.passportjs.org/docs/`
 You will need a credentials in facebook, twitter and google to be able to login in the app.
 
-# Google
+### Google
 `https://console.developers.google.com` to create your app. Enable the Google+ API to allow the app access the user profile information.
 Create a valid credentials. Be sure 'Authorized JavaScript origins' and 'Authorized redirect URIs' is set up with your correct app url.
 
-# Facebook
+### Facebook
 `https://developers.facebook.com/apps` to create your app.
 Go to 'Oauth configuration' and be sure the redirects callbacks is set up with your correct app url.
 
-# Twitter
+### Twitter
 `https://apps.twitter.com` to create your app.
 Go to 'Settings' and be sure the redirects callbacks and website is set up with your correct app url.
 
