@@ -44,9 +44,9 @@ var init = function(){
         },
         // Change that..
         passportGoogle: {
-            consumerKey     : "<ConsumerKey>",
-            consumerSecret  : "<ConsumerSecret>",
-            callbackURL     : "/auth/twitter/callback",
+            clientID        : "<clientID>",
+            clientSecret    : "<clientSecret>",
+            callbackURL     : "/auth/google/callback",
             profileFields   : ["id", "displayName", "photos"]
         }
     };

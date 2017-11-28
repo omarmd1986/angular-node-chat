@@ -30,4 +30,12 @@ router.get('/auth/twitter/callback', passport.authenticate('twitter', {
 		failureFlash: true
 }));
 
+// 3. Login via Google
+router.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+router.get('/auth/google/callback', passport.authenticate('google', {
+		successRedirect: '/rooms',
+		failureRedirect: '/',
+		failureFlash: true
+}));
+
 module.exports = router;

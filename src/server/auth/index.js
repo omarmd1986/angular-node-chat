@@ -5,6 +5,7 @@ var passport 	= require('passport');
 
 var FacebookStrategy  	= require('passport-facebook').Strategy;
 var TwitterStrategy  	= require('passport-twitter').Strategy;
+var GoogleStrategy 		= require('passport-google-oauth').OAuth2Strategy;
 
 var JwtStrategy = require('passport-jwt').Strategy;
 
@@ -41,6 +42,7 @@ var init = function(){
 	// Plug-in Facebook & Twitter Strategies
 	passport.use(new FacebookStrategy(config.passportFacebook, verifySocialAccount));
 	passport.use(new TwitterStrategy(config.passportTwitter, verifySocialAccount));
+	passport.use(new GoogleStrategy(config.passportGoogle, verifySocialAccount));
 
 	// Authenticated request.
 	passport.use(new JwtStrategy(config.jwtOptions, function(jwt_payload, done) {
