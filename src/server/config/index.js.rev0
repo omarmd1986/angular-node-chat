@@ -1,0 +1,55 @@
+'use strict';
+
+var crypto = require('crypto-random-string');
+
+var ExtractJwt = require('passport-jwt').ExtractJwt;
+
+var init = function(){
+    return {
+        title: '<TITLE>',
+        dbUri: "mongodb://<user>:<passport>@<server>:<port>/<dbname>",
+        sessionSecret       : crypto(30),
+        default_user_picture: 'public/inages/user.png',
+        salt_work_factor    : 10,
+        
+        // passports options
+        jwtOptions  : {
+            // Creates a new extractor that looks for the JWT in the authorization header with the scheme 'bearer'
+            jwtFromRequest  : ExtractJwt.fromAuthHeaderAsBearerToken(),
+            // Is a string or buffer containing the secret (symmetric) or PEM-encoded public key (asymmetric) for verifying the token's signature.
+            secretOrKey     : crypto(30),
+            // If defined the token issuer (iss) will be verified against this value.
+            // @See https://tools.ietf.org/html/rfc7519#section-4.1.1
+            issuer          : '<issuer>',           
+            // If defined, the token audience (aud) will be verified against this value.
+            // @See https://tools.ietf.org/html/rfc7519#section-4.1.3
+            audience        : '<audience>',
+            // Used to create the JWT token.
+            // Time in seconds the token will be valid
+            expiresIn       : 3600,
+            // If true do not validate the expiration of the token.
+            ignoreExpiration: false
+        },
+        passportFacebook: {
+            clientID        : "<clientID>",
+            clientSecret    : "<clientSecret>",
+            callbackURL     : "/auth/facebook/callback",
+            profileFields   : ["id", "displayName", "photos"]
+        },
+        passportTwitter: {
+            consumerKey     : "<consumerKey>",
+            consumerSecret  : "<consumerSecret>",
+            callbackURL     : "/auth/twitter/callback",
+            profileFields   : ["id", "displayName", "photos"]
+        },
+        // Change that..
+        passportGoogle: {
+            consumerKey     : "<ConsumerKey>",
+            consumerSecret  : "<ConsumerSecret>",
+            callbackURL     : "/auth/twitter/callback",
+            profileFields   : ["id", "displayName", "photos"]
+        }
+    };
+}
+
+module.exports = init();

@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# config files
+/src/server/config/index.js
+
 # compiled output
 /dist
 /tmp
