@@ -2,6 +2,7 @@
 
 var config 		= require('../config');
 var passport 	= require('passport');
+var jsonwebtoken = require('jsonwebtoken');
 
 var FacebookStrategy  	= require('passport-facebook').Strategy;
 var TwitterStrategy  	= require('passport-twitter').Strategy;
@@ -19,23 +20,29 @@ var User = require('../models/user');
 var init = function(){
 
 	// Serialize and Deserialize user instances to and from the session.
-	passport.serializeUser(function(user, done) {
-		done(null, user.id);
+	passport.serializeUser(function(token, done) {
+		done(null, token);
 	});
 
-	passport.deserializeUser(function(id, done) {
-		User.findById(id, function (err, user) {
-			done(err, user);
-		});
-	});
+	// passport.deserializeUser(function(to, done) {
+	// 	User.findById(id, function (err, user) {
+	// 		done(err, user);
+	// 	});
+	// });
 
 	// In case of Facebook, tokenA is the access token, while tokenB is the refersh token.
 	// In case of Twitter, tokenA is the token, whilet tokenB is the tokenSecret.
 	var verifySocialAccount = function(tokenA, tokenB, data, done) {
-		console.log(tokenA, tokenB, data);
 		User.findOrCreate(data, function (err, user) {
 			if (err) { return done(err); }
-			return done(err, user); 
+			// Create a new JWT.
+			// This token will be assign to the request body
+			// We return to an angular page passing the JWT
+			// Angular will keep this token to future request.
+			jsonwebtoken.sign({
+				id: user.id
+				// more params here to know what the user can do.
+			}, config.jwtSecret, config.jwtOptions, done);
 		});
 	};
 
@@ -45,18 +52,9 @@ var init = function(){
 	passport.use(new GoogleStrategy(config.passportGoogle, verifySocialAccount));
 
 	// Authenticated request.
-	passport.use(new JwtStrategy(config.jwtOptions, function(jwt_payload, done) {
-		User.findOne({id: jwt_payload.sub}, function(err, user) {
-			if (err) {
-				return done(err, false);
-			}
-			if (user) {
-				return done(null, user);
-			} else {
-				return done(null, false);
-				// or you could create a new account
-			}
-		});
+	// The token generated in verifySocialAccount
+	passport.use(new JwtStrategy(config.passportJwtOptions, function(jwt_payload, done) {
+		User.findOne({_id: jwt_payload.id}, done);
 	}));
 
 	return passport;

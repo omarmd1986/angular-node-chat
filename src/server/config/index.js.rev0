@@ -5,28 +5,42 @@ var crypto = require('crypto-random-string');
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 
 var init = function(){
+    let jwtSecret = '<secret>';
+    // If defined the token issuer (iss) will be verified against this value.
+    // @See https://tools.ietf.org/html/rfc7519#section-4.1.1
+    let iss = '<iss>'
+    // If defined, the token audience (aud) will be verified against this value.
+    // @See https://tools.ietf.org/html/rfc7519#section-4.1.3
+    , aud = '<aud>';
+    
     return {
         title: '<TITLE>',
         dbUri: "mongodb://<user>:<passport>@<server>:<port>/<dbname>",
         sessionSecret       : crypto(30),
         default_user_picture: 'public/inages/user.png',
         salt_work_factor    : 10,
+
+        // Angular route to accept the access JWT
+        tokenAcceptCallback: '/jwt/callback?token=%s',
+        
+        // Request property to hold the JWT
+        jwtPtrHolder        : <jwtPtrHolder>,
+        jwtSecret           : jwtSecret,
+
+        jwtOptions  : {
+            audience        : iss,
+            issuer          : aud,
+            expiresIn       : 3600
+        },
         
         // passports options
-        jwtOptions  : {
+        passportJwtOptions  : {
             // Creates a new extractor that looks for the JWT in the authorization header with the scheme 'bearer'
-            jwtFromRequest  : ExtractJwt.fromAuthHeaderAsBearerToken(),
+            jwtFromRequest  : ExtractJwt.fromHeader('authorization'),
             // Is a string or buffer containing the secret (symmetric) or PEM-encoded public key (asymmetric) for verifying the token's signature.
-            secretOrKey     : crypto(30),
-            // If defined the token issuer (iss) will be verified against this value.
-            // @See https://tools.ietf.org/html/rfc7519#section-4.1.1
-            issuer          : '<issuer>',           
-            // If defined, the token audience (aud) will be verified against this value.
-            // @See https://tools.ietf.org/html/rfc7519#section-4.1.3
-            audience        : '<audience>',
-            // Used to create the JWT token.
-            // Time in seconds the token will be valid
-            expiresIn       : 3600,
+            secretOrKey     : jwtSecret,
+            issuer          : iss,
+            audience        : aud,
             // If true do not validate the expiration of the token.
             ignoreExpiration: false
         },
