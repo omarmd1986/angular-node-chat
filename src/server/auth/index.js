@@ -40,7 +40,10 @@ var init = function(){
 			// We return to an angular page passing the JWT
 			// Angular will keep this token to future request.
 			jsonwebtoken.sign({
-				id: user.id
+				id: user.id,
+				picture: user.picture,
+				socialId: user.socialId,
+				userName: user.username
 				// more params here to know what the user can do.
 			}, config.jwtSecret, config.jwtOptions, done);
 		});
