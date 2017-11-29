@@ -11,6 +11,7 @@ var router = express.Router();
 
 let opts = {
 	assignProperty: config.jwtPtrHolder,
+	failureRedirect: '/login',
 	failureFlash: true
 };
 
