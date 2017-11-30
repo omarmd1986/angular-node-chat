@@ -1,0 +1,12 @@
+const url = 'http://localhost:3000';
+
+export const Config = {
+    // property in local storage to hold the authenticate token.
+    jwtLocalStorage : 'api_key',
+    
+    API_URL: 'api',
+
+    loginFacebook: `${url}/auth/facebook`,
+    loginTwitter: `${url}/auth/twitter`,
+    loginGoogle: `${url}/auth/google`,
+}

@@ -30,6 +30,7 @@ var findOrCreate = function(data, callback){
 			var userData = {
 				username: data.displayName,
 				socialId: data.id,
+				provider: data.provider,
 				picture: data.photos[0].value || null
 			};
 

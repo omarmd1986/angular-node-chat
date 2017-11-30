@@ -2,6 +2,7 @@
 
 # config files
 /src/server/config/index.js
+src/app/core/config/config.ts
 
 # compiled output
 /dist
@@ -43,3 +44,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+.vscode/settings.json
