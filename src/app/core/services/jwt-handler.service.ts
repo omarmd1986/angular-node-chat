@@ -4,9 +4,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 //Observable for ajax request.
 import { Observable } from 'rxjs/Observable';
 
-//Test porpose. Remove it.
-import { of } from 'rxjs/observable/of';
-
 import * as JWT from "jwt-decode";
 import { Config } from "../config/config";
 import { LoginUser } from "../models/login-user";
@@ -14,46 +11,79 @@ import { LoggerService } from "./logger.service";
 
 @Injectable()
 export class JwtHandlerService {
-  
+
   /**
    * URL to validate the token.
    */
   private checkJWT = Config.API_URL + '/check';
 
-  private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  private _httpOptions = {
+    headers: null
   };
 
   constructor(
     private http: HttpClient,
     private logger: LoggerService
-  ) { }
+  ) { this.init(); }
 
-  getJwt(): string{
-    return localStorage.getItem(Config.jwtLocalStorage);
+  private init(): void {
+    let token = this.getJwt();
+    this.updateHeaders(token);
   }
 
-  setJwt(token: string):void{
-    localStorage.setItem(Config.jwtLocalStorage, token);
+  getJwt(): string | null {
+    try {
+      return localStorage.getItem(Config.jwtLocalStorage);
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
-  cleanSession(): void{
-    localStorage.removeItem(Config.jwtLocalStorage);
+  setJwt(token: string): void {
+    try {
+      localStorage.setItem(Config.jwtLocalStorage, token);
+      this.updateHeaders(token);
+    } catch (error) {
+      console.error(error);
+      this.cleanSession();
+    }
+  }
+
+  cleanSession(): void {
+    try {
+      localStorage.removeItem(Config.jwtLocalStorage);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   user(): LoginUser | null {
     let token = this.getJwt();
-    if(!token) return null;
+    if (!token) return null;
     try {
-      let obj = JWT(token);  
+      let obj = JWT(token);
       return obj;
     } catch (error) {
-      return null;      
+      console.error(error);
+      return null;
     }
   }
 
   isLoggin(): Observable<boolean> {
-    let req = this.http.get<any>(this.checkJWT, this.httpOptions);
+    let req = this.http.get<any>(this.checkJWT, this._httpOptions);
     return this.logger.handleRequest<boolean>(req, 'Validating JWT', false);
+  }
+
+  private updateHeaders(jwt: string): void {
+    delete this._httpOptions.headers;
+    this._httpOptions.headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': jwt
+    })
+  }
+
+  public httpOptions(): object {
+    return this._httpOptions;
   }
 }
