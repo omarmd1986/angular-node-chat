@@ -46,14 +46,4 @@ router.get('/auth/twitter/callback', passport.authenticate('twitter', opts), red
 router.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
 router.get('/auth/google/callback', passport.authenticate('google', opts), redirectFn);
 
-// Secure Page example
-router.post('/secure', passport.authenticate('jwt'), function(req, res){
-	res.send('Secure page');
-});
-
-// Just for now... Angular APP should get the token.
-router.get('/jwt/callback', function(req, res){
-	res.send(req.query.token);
-});
-
 module.exports = router;

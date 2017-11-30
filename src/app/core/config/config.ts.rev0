@@ -4,7 +4,7 @@ export const Config = {
     // property in local storage to hold the authenticate token.
     jwtLocalStorage : 'api_key',
     
-    API_URL: 'api',
+    API_URL: `${url}/api`,
 
     loginFacebook: `${url}/auth/facebook`,
     loginTwitter: `${url}/auth/twitter`,
