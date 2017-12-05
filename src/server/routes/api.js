@@ -6,7 +6,8 @@ var config  = require('../config');
 var router = express.Router();
 
 router.get('/check', function(req, res){
-    res.json({});
+    // Only return true. The token is valid
+    res.json(true);
 });
 
 module.exports = router;

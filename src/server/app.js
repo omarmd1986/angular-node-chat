@@ -12,6 +12,7 @@ var session       = require('express-session');
 var db            = require('./database');
 var passport      = require('./auth');
 var config        = require('./config');
+var cors          = require('./enable-cors');
 
 // Routes
 var index = require('./routes/index');
@@ -40,6 +41,8 @@ app.use('/bootstrap-social', express.static(path.join(__dirname, '../../node_mod
 
 // Initialize Passport
 app.use(passport.initialize());
+// Enable the CORS.
+app.use(cors.init());
 
 // Create a session to pass flash messages.
 app.use(session({

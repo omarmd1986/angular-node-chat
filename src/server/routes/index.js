@@ -24,15 +24,6 @@ let redirectFn = function(req, res){
 	return res.redirect(url);
 };
 
-/* GET home page. */
-router.get('/login', function(req, res, next) {
-    res.render('login', {
-      	title : config.title,
-		success: req.flash('success')[0],
-		errors: req.flash('error')
-	});
-});
-
 // Social Authentication routes
 // 1. Login via Facebook
 router.get('/auth/facebook', passport.authenticate('facebook'));

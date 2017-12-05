@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 //This is for handle httpclients errors
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, tap} from 'rxjs/operators';
 
 import { Message } from "../models/message";
 

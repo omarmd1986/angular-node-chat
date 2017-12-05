@@ -20,6 +20,13 @@ var init = function(){
         default_user_picture: 'public/inages/user.png',
         salt_work_factor    : 10,
 
+        //CORS
+        originWhiteList: [
+            'http://localhost:4200' // for local environments
+            , 'http://www.myapp.com' // Real URL
+        ],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+
         // Angular route to accept the access JWT
         tokenAcceptCallback: '/jwt/callback?token=%s',
         

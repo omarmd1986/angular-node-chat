@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 //Observable for ajax request.
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 
 import * as JWT from "jwt-decode";
 import { Config } from "../config/config";
@@ -71,6 +72,10 @@ export class JwtHandlerService {
   }
 
   isLoggin(): Observable<boolean> {
+    let jwt = this.getJwt();
+    if(!jwt){
+      return of(false);
+    }
     let req = this.http.get<any>(this.checkJWT, this._httpOptions);
     return this.logger.handleRequest<boolean>(req, 'Validating JWT', false);
   }
