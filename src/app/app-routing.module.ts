@@ -18,13 +18,17 @@ import { DashboardComponent } from "./modules/dashboard/dashboard/dashboard.comp
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'jwt/callback', component: LoginCallbackComponent },
+  //Default page
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  // 404 page redirect to dashboard to
+  { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
+  // Secure frontend pages
   {
     path: '', component: SecureComponent, canActivate: [AuthGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent }
     ]
-  }
+  },
 ];
 
 @NgModule({
