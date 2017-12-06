@@ -1,17 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
 import { LoginCallbackComponent } from './login-callback/login-callback.component';
-import { SecureComponent } from './secure/secure.component';
 
 @NgModule({
   imports: [
-    CommonModule,
-    RouterModule
+    CommonModule
   ],
-  declarations: [LoginComponent, LoginCallbackComponent, SecureComponent],
+  declarations: [LoginComponent, LoginCallbackComponent],
   exports: []
 })
 export class LoginModule { }
