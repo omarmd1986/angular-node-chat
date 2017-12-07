@@ -9,11 +9,11 @@ import { MenuService } from "../menu.service";
 })
 export class MenuComponent implements OnInit {
 
-  @Input() icon: string | null;
   @Input() longText: string | null;
-  @Input() shortText: string | null;
+  // directive
+  shortText: string | null;
 
-  active: boolean;
+  @Input() active: boolean;
 
   constructor(
     public _menu: MenuService

@@ -5,13 +5,14 @@ import { RouterModule } from "@angular/router";
 import { MenuComponent } from './menu/menu.component';
 import { MenuService } from './menu.service';
 import { Item } from "./item";
+import { InitialsPipe } from './initials.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule
   ],
-  declarations: [MenuComponent],
+  declarations: [MenuComponent, InitialsPipe],
   exports:[MenuComponent]
 })
 

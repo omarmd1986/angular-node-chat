@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { JwtHandlerService } from "../../../core/services/jwt-handler.service";
+import { JwtHandlerService } from "../../../core/index";
 
 @Component({
   selector: 'app-header',
@@ -9,6 +9,7 @@ import { JwtHandlerService } from "../../../core/services/jwt-handler.service";
 export class HeaderComponent implements OnInit {
 
   user: any;
+  private isActive: boolean = false;
 
   constructor(
     private jwt: JwtHandlerService
@@ -17,5 +18,4 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() { }
-
 }

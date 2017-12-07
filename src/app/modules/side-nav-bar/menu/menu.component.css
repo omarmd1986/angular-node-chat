@@ -3,6 +3,20 @@
 */
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+}
+
 a, a:hover, a:focus {
     color: inherit;
     text-decoration: none;
@@ -59,9 +73,7 @@ i, span {
     text-align: center;
 }
 
-#sidebar.active .sidebar-header h3,
-#sidebar.active .sidebar-header img,
-#sidebar.active .CTAs {
+#sidebar.active .sidebar-header h3, #sidebar.active .CTAs {
     display: none;
 }
 
@@ -82,7 +94,7 @@ i, span {
 #sidebar.active ul li a i {
     margin-right:  0;
     display: block;
-    font-size: 1.8em !important;
+    font-size: 1.8em;
     margin-bottom: 5px;
 }
 
@@ -104,15 +116,9 @@ i, span {
     background: #6d7fcc;
 }
 
-#sidebar .sidebar-header img {
-    margin: 0 auto;
-    max-width: 70px;
-    min-width: 70px;
-}
-
 #sidebar .sidebar-header strong {
     display: none;
-    font-size: 1.8em !important;
+    font-size: 1.8em;
 }
 
 #sidebar ul.components {
@@ -122,7 +128,7 @@ i, span {
 
 #sidebar ul li a {
     padding: 10px;
-    font-size: 1.1em !important;
+    font-size: 1.1em;
     display: block;
 }
 #sidebar ul li a:hover {
@@ -214,13 +220,11 @@ a.article, a.article:hover {
         -ms-transform: translateX(50%);
         transform: translateX(50%);
     }
-    /* #sidebar.active {
+    #sidebar.active {
         margin-left: 0 !important;
-    } */
+    }
 
-    #sidebar .sidebar-header h3,
-    #sidebar .sidebar-header img,
-    #sidebar .CTAs {
+    #sidebar .sidebar-header h3, #sidebar .CTAs {
         display: none;
     }
 
