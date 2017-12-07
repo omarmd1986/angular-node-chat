@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { JwtHandlerService } from "../../../core/index";
 
 @Component({
   selector: 'app-secure',
@@ -7,8 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SecureComponent implements OnInit {
 
-  constructor() { }
+  user: any;
 
-  ngOnInit() { }
+  constructor(
+    private jwt: JwtHandlerService
+  ) { }
+
+  ngOnInit() { 
+    this.user = this.jwt.user();
+  }
 
 }

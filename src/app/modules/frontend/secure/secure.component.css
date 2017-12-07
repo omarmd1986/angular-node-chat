@@ -1,3 +1,14 @@
-article.main-content{
-    margin-left: 70px;
+#wrapper {
+    display: flex;
+    align-items: stretch;
+}
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+#content {
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.5s;
+    padding-top: 50px;
 }

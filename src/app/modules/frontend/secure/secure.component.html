@@ -1,10 +1,10 @@
 <app-header></app-header>
 
-<section class="container-fluid">
-  <aside-nav-bar></aside-nav-bar>
-  <article class="main-content">
+<section id="wrapper">
+  <aside-nav-bar [icon]=user.picture [longText]=user.userName style="z-index: 10000"></aside-nav-bar>
+  <article id="content">
     <router-outlet></router-outlet>
+    <app-footer></app-footer>
   </article>
-</section>
 
-<app-footer></app-footer>
+</section>

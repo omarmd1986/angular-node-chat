@@ -35,8 +35,9 @@ const routes: Routes = [
 ];
 
 const items: Item[] = [
-  {text: 'Text1', icon: 'fa fa-user', href:'', childs:[
-    {text: 'Text 32', href:'/test', icon:'fa fa-book'}
+  {text: 'Dashboard', icon: 'glyphicon glyphicon-home', href:'/dashboard', childs:[]},
+  {text: 'Settings', icon: 'glyphicon glyphicon-cog', href:'', childs:[
+    {text: 'Password', href:'/password', icon:'glyphicon glyphicon-leaf'}
   ]}
 ];
 

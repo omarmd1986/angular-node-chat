@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { MenuService } from "../menu.service";
 
@@ -9,22 +9,17 @@ import { MenuService } from "../menu.service";
 })
 export class MenuComponent implements OnInit {
 
-  public over: boolean;
+  @Input() icon: string | null;
+  @Input() longText: string | null;
+  @Input() shortText: string | null;
+
+  active: boolean;
 
   constructor(
     public _menu: MenuService
-  ) { 
-    this.over = false;
+  ) {
+    this.active = true;
   }
 
   ngOnInit() { }
-
-  close($event): void {
-    this.over = false;
-  }
-
-  show($event): void{
-    this.over = true;
-  }
-
 }

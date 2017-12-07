@@ -1,13 +1,38 @@
-<div id="mySidenav"
-[ngClass]="{'sidenav navbar navbar-inverse': true, 'show': over}"
-(mouseout)="close($event)" (mouseenter)="show($event)">
-  
-  <a *ngFor="let item of _menu.items" routerLink="{{ item.href }}" class="maximize">
-    <i class="{{ item.icon }}"></i>
-    {{ item.text }}
-  </a>
+<nav id="sidebar" ng-class="{'active': active}">
 
-  <a *ngFor="let item of _menu.items" class="minimize">
-    <i class="{{ item.icon }}"></i>
-  </a>
-</div>
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    <h3 class="float-left">{{longText}}</h3>
+    <strong>{{shortText}}</strong>
+  </div>
+
+  <!-- Sidebar Links -->
+  <ul class="list-unstyled components">
+    <li *ngFor="let item of _menu.items; let i = index">
+      <a *ngIf="item.href != '' && item.childs.length == 0" routerLink="{{ item.href }}">
+        <i class="{{item.icon}}"></i>
+        {{item.text}}
+      </a>
+
+      <a *ngIf="item.childs.length !== 0" href="#submenu{{i}}" data-toggle="collapse" aria-expanded="false">
+        <i class="{{item.icon}}"></i>
+        {{item.text}}
+      </a>
+      
+      <ul *ngIf="item.childs.length !== 0" class="collapse list-unstyled" id="submenu{{i}}">
+        <li *ngFor="let subItem of item.childs">
+            <a *ngIf="subItem.href != ''" routerLink="{{ subItem.href }}">
+                <i class="{{subItem.icon}}"></i>
+                {{subItem.text}}
+            </a>
+        </li>
+      </ul>
+
+    </li>
+
+  </ul>
+  <!-- <ul class="list-unstyled CTAs">
+      <li><a href="" class="download">Download</a></li>
+      <li><a href="" class="article">Article</a></li>
+  </ul> -->
+</nav>
