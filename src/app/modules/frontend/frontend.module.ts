@@ -6,11 +6,13 @@ import { SecureComponent } from './secure/secure.component';
 import { RoomComponent } from './room/room.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { SideNavBarModule } from "../side-nav-bar/side-nav-bar.module";
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    SideNavBarModule
   ],
   declarations: [SecureComponent, RoomComponent, HeaderComponent, FooterComponent]
 })

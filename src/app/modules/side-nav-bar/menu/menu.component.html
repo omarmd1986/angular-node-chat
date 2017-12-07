@@ -1,0 +1,13 @@
+<div id="mySidenav"
+[ngClass]="{'sidenav navbar navbar-inverse': true, 'show': over}"
+(mouseout)="close($event)" (mouseenter)="show($event)">
+  
+  <a *ngFor="let item of _menu.items" routerLink="{{ item.href }}" class="maximize">
+    <i class="{{ item.icon }}"></i>
+    {{ item.text }}
+  </a>
+
+  <a *ngFor="let item of _menu.items" class="minimize">
+    <i class="{{ item.icon }}"></i>
+  </a>
+</div>

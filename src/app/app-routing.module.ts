@@ -5,6 +5,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { CoreModule } from "./core/core.module";
 import { AuthGuard } from "./core/guards/auth.guard";
 
+// Side nav bar module
+import { SideNavBarModule } from "./modules/side-nav-bar/side-nav-bar.module";
+import { Item, SubItem } from "./modules/side-nav-bar/item";
+
 // Login Module
 import { LoginModule } from "./modules/login/login.module";
 import { LoginComponent } from "./modules/login/login/login.component";
@@ -33,12 +37,32 @@ const routes: Routes = [
     ]
   },
   // 404 page redirect to dashboard to
-  { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },   
+  { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
+];
+
+const items: Item[] = [
+  {text: 'Text1', icon: 'fa fa-user', href:'', childs:[
+    {text: 'Text 32', href:'/test', icon:'fa fa-book'}
+  ]}
 ];
 
 @NgModule({
-  exports: [CoreModule, LoginModule, DashboardModule, FrontendModule, RouterModule],
-  imports: [CoreModule, LoginModule, DashboardModule, FrontendModule, RouterModule.forRoot(routes)]
+  exports: [
+    CoreModule,
+    LoginModule,
+    DashboardModule,
+    FrontendModule,
+    RouterModule,
+    SideNavBarModule
+  ],
+
+  imports: [CoreModule,
+    LoginModule,
+    DashboardModule,
+    FrontendModule,
+    RouterModule.forRoot(routes),
+    SideNavBarModule.forRoot(items)
+  ]
 })
 
 export class AppRoutingModule { }
