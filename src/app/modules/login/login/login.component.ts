@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Config } from "../../../core/config/config";
+import { Config } from "../../../core/index";
 
 @Component({
   selector: 'app-login',

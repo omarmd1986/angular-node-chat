@@ -5,16 +5,12 @@ import { Component, OnInit } from '@angular/core';
  * This component is interested in the route's bag of parameters extracted from the URL. 
  * The "id" parameter is the id of the hero to display.
  */
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
-import { JwtHandlerService } from "../../../core/services/jwt-handler.service";
-import { NavigateService } from "../../../core/services/navigate.service";
-import { Params } from '@angular/router';
+import { JwtHandlerService, NavigateService } from "../../../core/index";
 
 @Component({
-  selector: 'app-login-callback',
-  templateUrl: './login-callback.component.html',
-  styleUrls: ['./login-callback.component.css']
+  template: ''
 })
 export class LoginCallbackComponent implements OnInit {
 

@@ -2,30 +2,24 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 // Core Module
-import { CoreModule } from "./core/core.module";
-import { AuthGuard } from "./core/guards/auth.guard";
+import { CoreModule, AuthGuard } from "./core/index";
 
 // Side nav bar module
-import { SideNavBarModule } from "./modules/side-nav-bar/side-nav-bar.module";
-import { Item, SubItem } from "./modules/side-nav-bar/item";
+import { SideNavBarModule, Item, SubItem } from "./modules/side-nav-bar/index";
 
 // Login Module
-import { LoginModule } from "./modules/login/login.module";
-import { LoginComponent } from "./modules/login/login/login.component";
-import { LoginCallbackComponent } from "./modules/login/login-callback/login-callback.component";
+import { LoginModule, LoginComponent, LoginCallbackComponent, LogoutComponent } from "./modules/login/index";
 
 // Dashboar Module
-import { DashboardModule } from "./modules/dashboard/dashboard.module";
-import { DashboardComponent } from "./modules/dashboard/dashboard/dashboard.component";
+import { DashboardModule, DashboardComponent } from "./modules/dashboard/index";
 
 // Frontend Module
-import { FrontendModule } from "./modules/frontend/frontend.module";
-import { SecureComponent } from "./modules/frontend/secure/secure.component";
-import { RoomComponent } from "./modules/frontend/room/room.component";
+import { FrontendModule, SecureComponent, RoomComponent } from "./modules/frontend/index";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'jwt/callback', component: LoginCallbackComponent },
+  { path: 'logout', component: LogoutComponent },
   //Default page
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   // Secure frontend pages
