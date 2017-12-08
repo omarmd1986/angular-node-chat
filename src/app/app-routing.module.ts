@@ -14,7 +14,7 @@ import { LoginModule, LoginComponent, LoginCallbackComponent, LogoutComponent } 
 import { DashboardModule, DashboardComponent } from "./modules/dashboard/index";
 
 // Frontend Module
-import { FrontendModule, SecureComponent, RoomComponent } from "./modules/frontend/index";
+import { FrontendModule, SecureComponent, RoomsComponent, RoomComponent } from "./modules/frontend/index";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -27,6 +27,7 @@ const routes: Routes = [
     path: '', component: SecureComponent, canActivate: [AuthGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'rooms', component: RoomsComponent },
       { path: 'room/:id', component: RoomComponent }
     ]
   },
@@ -36,6 +37,7 @@ const routes: Routes = [
 
 const items: Item[] = [
   {text: 'Dashboard', icon: 'glyphicon glyphicon-home', href:'/dashboard', childs:[]},
+  {text: 'Rooms', icon: 'glyphicon glyphicon-oil', href:'/rooms', childs:[]},
   {text: 'Settings', icon: 'glyphicon glyphicon-cog', href:'', childs:[
     {text: 'Password', href:'/password', icon:'glyphicon glyphicon-leaf'}
   ]}

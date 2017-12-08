@@ -7,6 +7,7 @@ import { RoomComponent } from './room/room.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SideNavBarModule } from "../side-nav-bar/side-nav-bar.module";
+import { RoomsComponent } from './rooms/rooms.component';
 
 @NgModule({
   imports: [
@@ -14,6 +15,6 @@ import { SideNavBarModule } from "../side-nav-bar/side-nav-bar.module";
     RouterModule,
     SideNavBarModule
   ],
-  declarations: [SecureComponent, RoomComponent, HeaderComponent, FooterComponent]
+  declarations: [SecureComponent, RoomComponent, HeaderComponent, FooterComponent, RoomsComponent]
 })
 export class FrontendModule { }
