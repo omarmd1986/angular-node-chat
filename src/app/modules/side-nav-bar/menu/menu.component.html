@@ -22,7 +22,6 @@
       <ul *ngIf="item.childs.length !== 0" class="collapse list-unstyled" id="submenu{{i}}">
         <li *ngFor="let subItem of item.childs">
             <a *ngIf="subItem.href != ''" routerLink="{{ subItem.href }}">
-                <i class="{{subItem.icon}}"></i>
                 {{subItem.text}}
             </a>
         </li>
