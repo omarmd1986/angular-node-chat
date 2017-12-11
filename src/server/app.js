@@ -18,6 +18,9 @@ var cors          = require('./enable-cors');
 var index = require('./routes/index');
 var api = require('./routes/api');
 
+// Guards.
+var guards = require('./guards');
+
 var app = express();
 
 // view engine setup
@@ -55,7 +58,7 @@ app.use(flash());
 
 // Routes
 app.use('/', index);
-app.use('/api', passport.authenticate('jwt'), api);
+app.use('/api', passport.authenticate('jwt'), guards.banned, api);
 
 // Serve the Angular App
 app.get('*', function(req, res) {

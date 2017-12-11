@@ -12,6 +12,7 @@ var JwtStrategy = require('passport-jwt').Strategy;
 
 var User = require('../models/user');
 
+
 /**
  * Encapsulates all code for authentication 
  * Either by using username and password, or by using social accounts
@@ -45,6 +46,8 @@ var init = function () {
 				socialId: user.socialId,
 				userName: user.username,
 				provider: user.provider,
+				is_admin: user.is_admin,
+				forbbiden: user.forbidden
 				// more params here to know what the user can do.
 			}, config.jwtSecret, config.jwtOptions, done);
 		});
@@ -57,8 +60,12 @@ var init = function () {
 
 	// Authenticated request.
 	// The token generated in verifySocialAccount
-	passport.use(new JwtStrategy(config.passportJwtOptions, function (jwt_payload, done) {
-		User.findOne({ _id: jwt_payload.id }, done);
+	passport.use(new JwtStrategy(config.passportJwtOptions, function (req, jwt_payload, done) {
+		User.findOne({ _id: jwt_payload.id }, function(err, user){
+			// Saving the user to next functions
+			req.user = user;
+			done(err, user);
+		});
 	}));
 
 	return passport;

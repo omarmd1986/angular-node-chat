@@ -15,6 +15,17 @@ var findById = function (id, callback){
 	userModel.findById(id, callback);
 }
 
+var toggle = function(id, options, callback){
+	findById(id, function(err, user){
+		if(err){
+			callback(err, null);
+		}
+		user.toggle(options);
+		// Save the ban status.
+		user.save(callback);
+	});
+};
+
 
 /**
  * Find a user, and create one if doesn't exist already.
@@ -49,8 +60,9 @@ var findOrCreate = function(data, callback){
 }
 
 module.exports = { 
-	create, 
-	findOne, 
-	findById, 
-	findOrCreate
+	create,
+	findOne,
+	findById,
+	findOrCreate,
+	toggle
 };

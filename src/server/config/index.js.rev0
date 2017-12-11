@@ -49,7 +49,9 @@ var init = function(){
             issuer          : iss,
             audience        : aud,
             // If true do not validate the expiration of the token.
-            ignoreExpiration: false
+            ignoreExpiration: false,
+            //If true the request will be passed to the verify callback. i.e. verify(request, jwt_payload, done_callback).
+            passReqToCallback: true
         },
         passportFacebook: {
             clientID        : "<clientID>",

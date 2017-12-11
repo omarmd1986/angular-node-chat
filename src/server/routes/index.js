@@ -17,11 +17,14 @@ let opts = {
 
 let redirectFn = function(req, res){
 	if(!req[config.jwtPtrHolder]){
-		req.flash('error', 'JWT not found!');
 		return res.redirect('/login');
 	}
 	let url = sprintf(config.tokenAcceptCallback, req[config.jwtPtrHolder]);
 	return res.redirect(url);
+};
+
+let catchFn = function(req, res, next){
+
 };
 
 // Social Authentication routes
