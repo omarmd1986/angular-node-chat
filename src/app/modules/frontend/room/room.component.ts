@@ -26,8 +26,9 @@ export class RoomComponent implements OnInit {
     });
 
     var channel = this.pusher.subscribe(this.roomId);
-    channel.bind('message', function(data) {
-      alert(data.message);
+    channel.bind('message', function (data) {
+      console.log(data)
+      alert(data);
     });
 
   }

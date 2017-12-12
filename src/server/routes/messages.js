@@ -2,6 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
+var moment = require('moment');
 
 var pusher = require('../pusher');
 var guards = require('../guards');
@@ -10,7 +11,12 @@ var MessageModel = require('../models/message');
 
 router.post('/:room', guards.requiredRoom, function (req, res) {
 
-    pusher.sendMessage(req.params.room, req.body.text, function (err, something) {
+    pusher.sendMessage(req.params.room, {
+        text: req.body.text,
+        user: req.user,
+        room: req.room,
+        date: moment().utc().format()
+    }, function (err, something) {
         if (err) {
             return res.status(400).json({ message: 'Unable to send the message' });
         }
