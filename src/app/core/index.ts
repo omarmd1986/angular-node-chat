@@ -10,5 +10,9 @@ export * from './services/jwt-handler.service';
 export * from './services/logger.service';
 export * from './services/navigate.service';
 export * from './services/pusher.service';
+export * from './services/user.service';
+export * from './services/room.service';
 
 export * from './guards/auth.guard';
+
+export * from './rooms-list/rooms-list.component';

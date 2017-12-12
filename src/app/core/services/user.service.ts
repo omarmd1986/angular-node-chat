@@ -27,6 +27,14 @@ export class UserService {
   }
 
   /**
+   * Getting the login user's rooms
+   */
+  myRooms(): Observable<[Room]>{
+    let req = this.http.get<any>(`${Config.API_URL}/user/me/rooms`, this.jwt.httpOptions());
+    return this.logger.handleRequest<[Room]>(req, `Getting the login user's rooms`, null);
+  }
+
+  /**
    * Subscribe the room to the user.
    * @param roomId 
    */

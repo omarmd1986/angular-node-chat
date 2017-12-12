@@ -6,14 +6,17 @@ import { SecureComponent } from './secure/secure.component';
 import { RoomComponent } from './room/room.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { SideNavBarModule } from "../side-nav-bar/side-nav-bar.module";
 import { RoomsComponent } from './rooms/rooms.component';
+
+import { SideNavBarModule } from "../side-nav-bar/side-nav-bar.module";
+import { CoreModule } from "../../core/core.module";
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
-    SideNavBarModule
+    SideNavBarModule,
+    CoreModule
   ],
   declarations: [SecureComponent, RoomComponent, HeaderComponent, FooterComponent, RoomsComponent]
 })

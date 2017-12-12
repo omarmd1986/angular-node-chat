@@ -8,12 +8,14 @@ import { PusherService } from './services/pusher.service';
 import { RoomService } from './services/room.service';
 import { UserService } from './services/user.service';
 import { MessageService } from './services/message.service';
+import { RoomsListComponent } from './rooms-list/rooms-list.component';
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: [],
+  declarations: [RoomsListComponent],
+  exports: [RoomsListComponent],
   providers: [JwtHandlerService, LoggerService, NavigateService, AuthGuard, PusherService, RoomService, UserService, MessageService]
 })
 export class CoreModule { }
