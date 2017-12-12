@@ -11,13 +11,25 @@ router.get('/me', function (req, res) {
     return res.json(req.user);
 });
 
-router.get('/me/rooms', function(req, res){
+router.get('/me/rooms', function (req, res) {
     UserHasRoom
-    .myPublicRooms(req.user.id, function(err, rooms){
+        .myPublicRooms(req.user.id, function (err, rooms) {
+            if (err) {
+                return res.status(400).json({ message: 'Unable to find the user\'s rooms' });
+            }
+            return res.json(rooms)
+        });
+});
+
+router.post('/room/:room', guards.requiredRoom, function (req, res) {
+    UserHasRoom.findOrCreate({
+        user_id: req.user.id,
+        room_id: req.room.id
+    }, function(err, userhasroom){
         if(err){
-            return res.status(400).json({message: 'Unable to find the user\'s rooms'});
+            return res.status(400).json({message: 'Unable to create or find a room'});
         }
-        return res.json(rooms)
+        res.json(userhasroom);
     });
 });
 

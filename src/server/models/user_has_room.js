@@ -33,8 +33,22 @@ var myPublicRooms = function (id, callback) {
 		.exec(callback);
 };
 
+var updateStatus = function(user, room, status, callback){
+	UserHasRoomModel.findOne({
+		user: user,
+		room: room
+	}, function (err, user_room) {
+		if(err){
+			return callback(err, null);
+		}
+		user_room[status] = Date.now;
+		user_room.save(callback);
+	});
+};
+
 module.exports = {
 	create,
 	findOrCreate,
-	myPublicRooms
+	myPublicRooms,
+	updateStatus
 };
