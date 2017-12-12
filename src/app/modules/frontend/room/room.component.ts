@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import Pusher from 'pusher-js';
+import { PusherService, PusherMessage } from "../../../core";
 
 @Component({
   selector: 'app-room',
@@ -11,26 +11,21 @@ import Pusher from 'pusher-js';
 export class RoomComponent implements OnInit {
 
   roomId: any;
-  pusher: Pusher;
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private pusher: PusherService
   ) { }
 
   ngOnInit() {
     this.roomId = this.route.snapshot.paramMap.get('id');
+    /* Subscribe the login user to the room. */
+    /* If the API return an error. the user isn't subscriber. */
+    /* After the API return success, subscribes to the pusher, and the download the previous messages. */
 
-    this.pusher = new Pusher('b52baf92060e4ff1a3d3', {
-      cluster: 'us2',
-      encrypted: true
+    this.pusher.subscriberRoom(this.roomId, function(data: PusherMessage){
+      console.log(data);
     });
-
-    var channel = this.pusher.subscribe(this.roomId);
-    channel.bind('message', function (data) {
-      console.log(data)
-      alert(data);
-    });
-
   }
 
 }

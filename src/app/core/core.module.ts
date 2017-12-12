@@ -4,12 +4,13 @@ import { JwtHandlerService } from './services/jwt-handler.service';
 import { LoggerService } from './services/logger.service';
 import { NavigateService } from './services/navigate.service';
 import { AuthGuard } from './guards/auth.guard';
+import { PusherService } from './services/pusher.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [],
-  providers: [JwtHandlerService, LoggerService, NavigateService, AuthGuard]
+  providers: [JwtHandlerService, LoggerService, NavigateService, AuthGuard, PusherService]
 })
 export class CoreModule { }

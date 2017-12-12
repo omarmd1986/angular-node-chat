@@ -11,19 +11,22 @@ var MessageModel = require('../models/message');
 
 router.post('/:room', guards.requiredRoom, function (req, res) {
 
-    pusher.sendMessage(req.params.room, {
-        text: req.body.text,
-        user: req.user,
-        room: req.room,
-        date: moment().utc().format()
-    }, function (err, something) {
+    // save the message
+    MessageModel.create(req.user.id, req.params.room, { text: req.body.text }, function (err, message) {
         if (err) {
-            return res.status(400).json({ message: 'Unable to send the message' });
+            return res.status(400).json({ message: 'Unable to save the message' });
         }
-        // save the message
-        MessageModel.create(req.user.id, req.params.room, { text: req.body.text }, function (err, message) {
+        //Pass less information here...
+        pusher.sendMessage(req.params.room, {
+            text: req.body.text,
+            user: req.user,
+            room: req.room,
+            date: moment(message.created_at).utc().format()
+        }, function (err, something) {
             if (err) {
-                return res.status(400).json({ message: 'Unable to save the message' });
+                message.status = 'pusher_fail';
+                message.save();
+                return res.status(400).json({ message: 'Unable to send the message' });
             }
             return res.json(message);
         });
