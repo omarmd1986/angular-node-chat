@@ -1,30 +1,24 @@
 'use strict'
 
-var User        = require('../models/user');
-var UserModel   = require('../database').models.user;
+var express = require('express');
+var router = express.Router();
 
-var init = function (router) {
+var User = require('../models/user');
+var UserHasRoom = require('../models/user_has_room');
+var guards = require('../guards');
 
-    router.put('/user/:id/toggle/banned', function (req, res) {
-        let id = req.params.id;
-        User.toggle(id, 'is_ban', function (err, user) {
-            if (err) {
-                return res.status(400).json({ message: 'Unable to change the ban status.' });
-            }
-            return res.json({ is_banned: user.is_banned });
-        });
+router.get('/me', function (req, res) {
+    return res.json(req.user);
+});
+
+router.get('/me/rooms', function(req, res){
+    UserHasRoom
+    .myPublicRooms(req.user.id, function(err, rooms){
+        if(err){
+            return res.status(400).json({message: 'Unable to find the user\'s rooms'});
+        }
+        return res.json(rooms)
     });
+});
 
-    router.put('/user/:id/toggle/muted', function (req, res) {
-        let id = req.params.id;
-        User.toggle(id, 'is_mute', function (err, user) {
-            if (err) {
-                return res.status(400).json({ message: 'Unable to change the mute status.' });
-            }
-            return res.json({ is_muted: user.is_muted });
-        });
-    });
-
-};
-
-module.exports = init;
+module.exports = router;

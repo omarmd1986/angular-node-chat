@@ -23,8 +23,28 @@ var RoomSchema = new Schema({
     users: [{type: Schema.Types.ObjectId, ref: 'user_has_room'}]
 });
 
-// Rooms Log
+// Methods
+RoomSchema.methods.toggle = function(property){
+    this.settings[property] = !this.settings[property];
+    this.markModified('settings');
+    return this;
+};
 
+// Virtual Properties
+RoomSchema.virtual('is_activated').get(function(){
+    return this.settings.is_active;
+});
+
+RoomSchema.virtual('is_private').get(function(){
+    // could be an array of user.
+    return this.settings.is_private !== false;
+});
+
+RoomSchema.virtual('is_message_require_aproval').get(function(){
+    return this.settings.message_require_aproval;
+});
+
+// Rooms Log
 let roomLogSchema = new Schema({
     action: {type: Schema.Types.String, required: true},
     date: {type: Schema.Types.Date, default: Date.now},

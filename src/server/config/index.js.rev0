@@ -39,6 +39,15 @@ var init = function(){
             issuer          : aud,
             expiresIn       : 3600
         },
+
+        //Pusher Options
+        pusherOptions: {
+            appId: '',
+            key: '',
+            secret: '',
+            cluster: '',
+            encrypted: true
+        },
         
         // passports options
         passportJwtOptions  : {

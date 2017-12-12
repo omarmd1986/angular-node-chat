@@ -14,10 +14,6 @@ var passport      = require('./auth');
 var config        = require('./config');
 var cors          = require('./enable-cors');
 
-// Routes
-var index = require('./routes/index');
-var api = require('./routes/api');
-
 // Guards.
 var guards = require('./guards');
 
@@ -57,8 +53,7 @@ app.use(session({
 app.use(flash());
 
 // Routes
-app.use('/', index);
-app.use('/api', passport.authenticate('jwt'), guards.banned, api);
+require('./routes/index')(app);
 
 // Serve the Angular App
 app.get('*', function(req, res) {

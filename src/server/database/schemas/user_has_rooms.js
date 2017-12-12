@@ -9,6 +9,8 @@ let userHasRoomsSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'user' },
     // Room reference
     room: { type: Schema.Types.ObjectId, ref: 'room' },
+    // Messages reference
+    messages: [{type: Schema.Types.ObjectId, ref: 'message'}],
     
     //Is moderator
     is_mod: { type: Schema.Types.Boolean, default: false },
@@ -22,7 +24,7 @@ let userHasRoomsSchema = new Schema({
     },
 
     connected_at: { type: Schema.Types.Date, default: Date.now },
-    disconnected_at: { type: Schema.Types.Date, default: Date.now }
+    disconnected_at: { type: Schema.Types.Date, default: null }
 });
 
 let userHasRoomModel = Mongoose.model('user_has_room', userHasRoomsSchema);

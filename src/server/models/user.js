@@ -2,22 +2,22 @@
 
 var userModel = require('../database').models.user;
 
-var create = function (data, callback){
+var create = function (data, callback) {
 	var newUser = new userModel(data);
 	newUser.save(callback);
 };
 
-var findOne = function (data, callback){
+var findOne = function (data, callback) {
 	userModel.findOne(data, callback);
 }
 
-var findById = function (id, callback){
+var findById = function (id, callback) {
 	userModel.findById(id, callback);
 }
 
-var toggle = function(id, options, callback){
-	findById(id, function(err, user){
-		if(err){
+var toggle = function (id, options, callback) {
+	findById(id, function (err, user) {
+		if (err) {
 			callback(err, null);
 		}
 		user.toggle(options);
@@ -26,16 +26,20 @@ var toggle = function(id, options, callback){
 	});
 };
 
+var findAll = function (offset, limit, callback) {
+	offset = offset || 0;
+	limit = limit || 100;
+	userModel
+		.find()
+		.skip(offset)
+		.limit(limit)
+		.exec(callback);
+};
 
-/**
- * Find a user, and create one if doesn't exist already.
- * This method is used ONLY to find user accounts registered via Social Authentication.
- *
- */
-var findOrCreate = function(data, callback){
-	findOne({'socialId': data.id}, function(err, user){
-		if(err) { return callback(err); }
-		if(user){
+var findOrCreate = function (data, callback) {
+	findOne({ 'socialId': data.id }, function (err, user) {
+		if (err) { return callback(err); }
+		if (user) {
 			return callback(err, user);
 		} else {
 			var userData = {
@@ -48,21 +52,22 @@ var findOrCreate = function(data, callback){
 			// To avoid expired Facebook CDN URLs
 			// Request user's profile picture using user id 
 			// @see http://stackoverflow.com/a/34593933/6649553
-			if(data.provider == "facebook" && userData.picture){
+			if (data.provider == "facebook" && userData.picture) {
 				userData.picture = "http://graph.facebook.com/" + data.id + "/picture?type=large";
 			}
 
-			create(userData, function(err, newUser){
+			create(userData, function (err, newUser) {
 				callback(err, newUser);
 			});
 		}
 	});
 }
 
-module.exports = { 
+module.exports = {
 	create,
 	findOne,
 	findById,
 	findOrCreate,
-	toggle
+	toggle,
+	findAll
 };

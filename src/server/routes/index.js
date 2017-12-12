@@ -1,43 +1,39 @@
 'use strict'
 
-var express = require('express');
-var config  = require('../config');
-var passport = require('../auth');
-var sprintf = require('sprintf-js').sprintf;
+// Routes
+var auth = require('./auth');
+var api = require('./api');
 
-let User = require('../models/user');
+var userRoute = require('./user');
+var adminUserRoute = require('./admin/user');
 
-var router = express.Router();
+var messageRoute = require('./messages');
 
-let opts = {
-	assignProperty: config.jwtPtrHolder,
-	failureRedirect: '/login',
-	failureFlash: true
+var roomRoute = require('./room');
+var adminRoomRoute = require('./admin/room');
+
+var guards = require('../guards');
+var Passport = require('../auth');
+
+var init = function (app) {
+
+	// Passport authentication
+	app.use('/', auth);
+
+	// The user must be active
+	app.use('/api', Passport.authenticate('jwt'), guards.banned, api);
+
+	// The User endpoints.
+	app.use('/api/admin/user', Passport.authenticate('jwt'), guards.banned, guards.admin, adminUserRoute);
+	app.use('/api/user', Passport.authenticate('jwt'), guards.banned, userRoute);
+
+	// Message endpoint
+	app.use('/api/message', Passport.authenticate('jwt'), guards.banned, guards.room, messageRoute);
+
+	// Room endpoints
+	app.use('/api/admin/room', Passport.authenticate('jwt'), guards.banned, guards.admin, guards.room, adminRoomRoute);
+	app.use('/api/room', Passport.authenticate('jwt'), guards.banned, guards.room, roomRoute);
+
 };
 
-let redirectFn = function(req, res){
-	if(!req[config.jwtPtrHolder]){
-		return res.redirect('/login');
-	}
-	let url = sprintf(config.tokenAcceptCallback, req[config.jwtPtrHolder]);
-	return res.redirect(url);
-};
-
-let catchFn = function(req, res, next){
-
-};
-
-// Social Authentication routes
-// 1. Login via Facebook
-router.get('/auth/facebook', passport.authenticate('facebook'));
-router.get('/auth/facebook/callback', passport.authenticate('facebook', opts), redirectFn);
-
-// 2. Login via Twitter
-router.get('/auth/twitter', passport.authenticate('twitter'));
-router.get('/auth/twitter/callback', passport.authenticate('twitter', opts), redirectFn);
-
-// 3. Login via Google
-router.get('/auth/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
-router.get('/auth/google/callback', passport.authenticate('google', opts), redirectFn);
-
-module.exports = router;
+module.exports = init;
