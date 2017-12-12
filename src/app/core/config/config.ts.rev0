@@ -3,6 +3,12 @@ const url = 'http://localhost:3000';
 export const Config = {
     // property in local storage to hold the authenticate token.
     jwtLocalStorage : 'api_key',
+
+    pusherAppId: '',
+    pusherOpts: {
+        cluster: '',
+        encrypted: true
+    },
     
     API_URL: `${url}/api`,
 

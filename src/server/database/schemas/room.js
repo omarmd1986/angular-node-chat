@@ -9,7 +9,7 @@ var RoomSchema = new Schema({
     description: { type: Schema.Types.String },
     icon: { type: Schema.Types.String },
     settings: {type: Schema.Types.Mixed, default:{
-        message_require_aproval: false, // Admin or moderator needs to aprove the messages.
+        message_require_approval: false, // Admin or moderator needs to aprove the messages.
         is_active: true, // Is the rooms active?
         is_private: false // False if is not private room. Array of users ID if is a private room. Private messages live here
     }},
@@ -40,8 +40,8 @@ RoomSchema.virtual('is_private').get(function(){
     return this.settings.is_private !== false;
 });
 
-RoomSchema.virtual('is_message_require_aproval').get(function(){
-    return this.settings.message_require_aproval;
+RoomSchema.virtual('is_message_require_approval').get(function(){
+    return this.settings.message_require_approval;
 });
 
 // Rooms Log

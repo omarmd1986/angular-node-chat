@@ -32,19 +32,19 @@ router.post('/', function (req, res) {
 
 router.put('/:room/toggle/active', guards.requiredRoom, function (req, res) {
     RoomModel.toggle(req.params.room, 'is_active', function (err, room) {
-        if(err){
+        if (err) {
             return res.status(400).json({ message: 'Imposible to change the `active` status' });
         }
-        return res.json({ is_actived: room.is_activated });
+        return res.json(room.is_activated);
     });
 });
 
-router.put('/:room/toggle/aproval', guards.requiredRoom, function (req, res) {
-    RoomModel.toggle(req.params.room, 'message_require_aproval', function (err, room) {
-        if(err){
-            return res.status(400).json({ message: 'Imposible to change the `message require aproval` status' });
+router.put('/:room/toggle/approval', guards.requiredRoom, function (req, res) {
+    RoomModel.toggle(req.params.room, 'message_require_approval', function (err, room) {
+        if (err) {
+            return res.status(400).json({ message: 'Imposible to change the `message require approval` status' });
         }
-        return res.json({ is_message_require_aproval: room.is_message_require_aproval });
+        return res.json(room.is_message_require_approval);
     });
 });
 

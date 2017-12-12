@@ -16,9 +16,9 @@ router.get('/:id?', function (req, res) {
     };
     if (id) {
         User.findById(id, fn);
-    }else{
+    } else {
         let offset = req.query.offset
-        , limit = req.query.limit;
+            , limit = req.query.limit;
         User.findAll(offset, limit, fn);
     }
 });
@@ -29,7 +29,7 @@ router.put('/:id/toggle/banned', function (req, res) {
         if (err) {
             return res.status(400).json({ message: 'Unable to change the ban status.' });
         }
-        return res.json({ is_banned: user.is_banned });
+        return res.json(user.is_banned);
     });
 });
 
@@ -39,18 +39,18 @@ router.put('/:id/toggle/muted', function (req, res) {
         if (err) {
             return res.status(400).json({ message: 'Unable to change the mute status.' });
         }
-        return res.json({ is_muted: user.is_muted });
+        return res.json(user.is_muted);
     });
 });
 
-router.get('/:id/rooms', function(req, res){
+router.get('/:id/rooms', function (req, res) {
     UserHasRoom
-    .myPublicRooms(req.params.id, function(err, rooms){
-        if(err){
-            return res.status(400).json({message: 'Unable to find the user\'s rooms'});
-        }
-        return res.json(rooms)
-    });
+        .myPublicRooms(req.params.id, function (err, rooms) {
+            if (err) {
+                return res.status(400).json({ message: 'Unable to find the user\'s rooms' });
+            }
+            return res.json(rooms)
+        });
 });
 
 module.exports = router;
