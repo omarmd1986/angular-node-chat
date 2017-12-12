@@ -137,6 +137,16 @@ var allPublicRooms = function (callback) {
 		exec(callback);
 };
 
+/**
+ * For admins
+ * */
+var allRooms = function (callback) {
+	roomModel.
+		where('deleted_at').equals(null).
+		where('settings.is_private').equals(false).
+		exec(callback);
+};
+
 module.exports = {
 	create,
 	find,
@@ -146,5 +156,6 @@ module.exports = {
 	getUsers,
 	removeUser,
 	toggle,
-	allPublicRooms
+	allPublicRooms,
+	allRooms
 };

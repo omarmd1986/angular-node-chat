@@ -3,6 +3,33 @@
 let userModel = require('../database').models.user;
 let roomModel = require('../database').models.room;
 
+let roomFn = function (required, req, res, next) {
+    let id = req.params.room;
+    if (!id) {
+        return required 
+        ? res.status(404).json({ message: "Room not found." })
+        : next();
+    }
+    roomModel.findById(id, function (err, room) {
+        if (err || !room) {
+            return res.status(404).json({ message: "Room not found." });
+        }
+        req.room = room;
+        if (req.user.is_admin) {
+            // admin can access no matter what
+            return next();
+        }
+        if (!room.is_activated) {
+            return res.status(403).json({ message: "Room is not active." });
+        }
+        let _allowIds = room.settings.is_private;
+        if (room.is_private && _allowIds.indexOf(req.user.id) === -1) {
+            return res.status(403).json({ message: "Private room." });
+        }
+        next();
+    });
+};
+
 module.exports = {
     banned: function (req, res, next) {
         if (!req.user) {
@@ -18,33 +45,16 @@ module.exports = {
         next();
     },
 
-    room: function (req, res, next) {
-        let id = req.params.room;
-        if(!id){
-            return res.status(404).json({ message: "Room not found." });
-        }
-        roomModel.findById(id, function (err, room) {
-            if (err || !room) {
-                return res.status(404).json({ message: "Room not found." });
-            }
-            if(req.user.is_admin){
-                // admin can access no matter what
-                return next();
-            }
-            if (!room.is_activated) {
-                return res.status(403).json({ message: "Room is not active." });
-            }
-            let _allowIds = room.settings.is_private;
-            if (room.is_private && _allowIds.indexOf(req.user.id) === -1) {
-                return res.status(403).json({ message: "Private room." });
-            }
-            next();
-        });
-
+    requiredRoom: function (req, res, next) {
+        roomFn(true, req, res, next);
     },
 
-    admin: function(req, res, next){
-        if(req.user.is_admin){
+    room: function (req, res, next) {
+        roomFn(false, req, res, next);
+    },
+
+    admin: function (req, res, next) {
+        if (req.user.is_admin) {
             // admin can access no matter what
             return next();
         }

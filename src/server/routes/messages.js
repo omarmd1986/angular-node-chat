@@ -8,6 +8,9 @@ var pusher = require('../pusher');
 var MessageModel = require('../models/message');
 
 router.post('/send/:room', function (req, res) {
+    if(!req.room){
+        return res.status(404).json({ message: 'Unable to find the room' });
+    }
     pusher.sendMessage(req.params.room, req.body.text, function (err, something) {
         if (err) {
             return res.status(400).json({ message: 'Unable to send the message' });

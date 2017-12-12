@@ -28,11 +28,11 @@ var init = function (app) {
 	app.use('/api/user', Passport.authenticate('jwt'), guards.banned, userRoute);
 
 	// Message endpoint
-	app.use('/api/message', Passport.authenticate('jwt'), guards.banned, guards.room, messageRoute);
+	app.use('/api/message', Passport.authenticate('jwt'), guards.banned, messageRoute);
 
 	// Room endpoints
-	app.use('/api/admin/room', Passport.authenticate('jwt'), guards.banned, guards.admin, guards.room, adminRoomRoute);
-	app.use('/api/room', Passport.authenticate('jwt'), guards.banned, guards.room, roomRoute);
+	app.use('/api/admin/room', Passport.authenticate('jwt'), guards.banned, guards.admin, adminRoomRoute);
+	app.use('/api/room', Passport.authenticate('jwt'), guards.banned, roomRoute);
 
 };
 

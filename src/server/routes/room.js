@@ -4,8 +4,9 @@ var express = require('express');
 var router = express.Router();
 
 var RoomModel = require('../models/room');
+var guards = require('../guards');
 
-router.get('/:room?', function (req, res) {
+router.get('/:room?', guards.room, function (req, res) {
     let id = req.params.room;
     let fn = function (err, rooms) {
         if (err) {
@@ -14,7 +15,7 @@ router.get('/:room?', function (req, res) {
         res.json(rooms);
     };
     if (id) {
-        RoomModel.findById(id, fn);
+        fn(null, req.room);
     } else {
         RoomModel.allPublicRooms(fn);
     }
