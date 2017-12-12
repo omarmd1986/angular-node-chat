@@ -1,11 +1,11 @@
 <div class="media" *ngFor="let room of _rooms">
   <div class="media-left">
-      <a href="#">
+      <a (click)="click(room)">
           <i class="{{ room.icon }}"></i>
       </a>
   </div>
   <div class="media-body">
-      <h4 class="media-heading">{{ room.title }}</h4>
+      <h4 class="media-heading" (click)="click(room)">{{ room.title }}</h4>
       {{room.description}}
   </div>
 </div>

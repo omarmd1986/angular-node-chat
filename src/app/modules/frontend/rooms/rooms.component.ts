@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { UserService, RoomService, Room, LoginUser } from "../../../core/index";
+import { UserService, RoomService, Room, LoginUser, NavigateService } from "../../../core/index";
 
 @Component({
   selector: 'app-rooms',
@@ -14,7 +14,8 @@ export class RoomsComponent implements OnInit {
 
   constructor(
     private userSrc: UserService,
-    private roomSrc: RoomService
+    private roomSrc: RoomService,
+    private navigateSrc: NavigateService
   ) { }
 
   ngOnInit() {
@@ -30,12 +31,16 @@ export class RoomsComponent implements OnInit {
       }
     });
 
-    this.roomSrc.rooms().subscribe((rooms: [Room] | null) => {
+    this.roomSrc.roomsPublic().subscribe((rooms: [Room] | null) => {
       if(rooms == null){
         // some error
       }else{
         this.publicRooms = rooms;
       }
     });
+  }
+
+  goRoom($event: any): void{
+    this.navigateSrc.go(`/room/${$event._id}`)
   }
 }

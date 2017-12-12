@@ -31,6 +31,18 @@ export class LoggerService {
     this.messages.push(obj);
   }
 
+  lastError(): Message|null{
+    let reverse = this.messages.reverse();
+    let result = null;
+    reverse.forEach( (obj: Message) => {
+      if(obj.type == 'fail'){
+        result = obj;
+        return;
+      }
+    });
+    return result;
+  }
+
   remove(index: number): void{
     this.messages.slice(index, 1);
   }
@@ -65,7 +77,7 @@ export class LoggerService {
 
         // TODO: better job of transforming error for user consumption
         // We can here had a service to save in DB the errors
-        this.add(`${operation} failed: ${error.message}`, 'fail');
+        this.add(`${operation} failed: ${error.error && error.error.message ? error.error.message : error.message}`, 'fail');
 
         // Let the app keep running by returning an empty result.
         return of(result as T);

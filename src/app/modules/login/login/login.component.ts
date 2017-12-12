@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Config } from "../../../core/index";
+import { Config, LoggerService, Message } from "../../../core/index";
 
 @Component({
   selector: 'app-login',
@@ -12,12 +12,18 @@ export class LoginComponent implements OnInit {
   public loginTwitter: string;
   public loginGoogle: string;
 
-  constructor() {
+  public lastError: Message | null;
+
+  constructor(
+    private logger: LoggerService
+  ) {
     this.logginFacebook = Config.loginFacebook;
     this.loginTwitter = Config.loginTwitter;
     this.loginGoogle = Config.loginGoogle;
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.lastError = this.logger.lastError();
+  }
 
 }

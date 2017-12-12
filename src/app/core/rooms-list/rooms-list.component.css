@@ -1,3 +1,9 @@
 div.media i.glyphicon {
     font-size: xx-large;
 }
+
+div.media .media-heading:hover,
+div.media i.glyphicon:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
