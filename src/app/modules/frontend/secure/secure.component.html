@@ -1,10 +1,16 @@
 <app-header></app-header>
 
 <section id="wrapper">
-  <aside-nav-bar [longText]=user.userName 
-    style="z-index: 10000"></aside-nav-bar>
+  <aside-nav-bar [longText]=user.userName style="z-index: 10000"></aside-nav-bar>
   <article id="content">
     <router-outlet></router-outlet>
   </article>
-
 </section>
+
+<div class="logger-container container">
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+      <core-logger></core-logger>
+    </div>
+  </div>
+</div>

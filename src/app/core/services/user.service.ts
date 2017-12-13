@@ -39,7 +39,7 @@ export class UserService {
    * @param roomId 
    */
   addRoom(roomId: String): Observable<Room> {
-    let req = this.http.post<any>(`${Config.API_URL}/user/me/room/${roomId}`, null, this.jwt.httpOptions());
+    let req = this.http.post<any>(`${Config.API_URL}/user/room/${roomId}`, null, this.jwt.httpOptions());
     return this.logger.handleRequest<Room>(req, 'Subscribe the room to the user.', null);
   }
 

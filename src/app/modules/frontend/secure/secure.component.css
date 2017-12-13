@@ -12,3 +12,10 @@
     transition: all 0.5s;
     padding-top: 70px;
 }
+
+div.logger-container{
+    position: fixed;
+    bottom: 0px;
+    z-index: 1000000000000000000;
+    width: 100%;
+}

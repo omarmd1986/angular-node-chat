@@ -35,7 +35,7 @@ export class LoggerService {
     let reverse = this.messages.reverse();
     let result = null;
     reverse.forEach( (obj: Message) => {
-      if(obj.type == 'fail'){
+      if(obj.type == 'danger'){
         result = obj;
         return;
       }
@@ -44,7 +44,7 @@ export class LoggerService {
   }
 
   remove(index: number): void{
-    this.messages.slice(index, 1);
+    this.messages.splice(index, 1);
   }
   
   clear(): void{
@@ -59,7 +59,7 @@ export class LoggerService {
 
   handleRequest<T>(req: Observable<T>, message?: string, result?: T){
     return req.pipe(
-        tap(_ => this.add(message, 'trace')),
+        tap(_ => this.add(message, 'info')),
         catchError(this.handleError<T>(message, result))
     );
   }
@@ -77,7 +77,7 @@ export class LoggerService {
 
         // TODO: better job of transforming error for user consumption
         // We can here had a service to save in DB the errors
-        this.add(`${operation} failed: ${error.error && error.error.message ? error.error.message : error.message}`, 'fail');
+        this.add(`${operation} failed: ${error.error && error.error.message ? error.error.message : error.message}`, 'danger');
 
         // Let the app keep running by returning an empty result.
         return of(result as T);
