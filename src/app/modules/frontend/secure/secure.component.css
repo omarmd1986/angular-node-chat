@@ -11,6 +11,7 @@
     min-height: 100vh;
     transition: all 0.5s;
     padding-top: 70px;
+    flex: auto;
 }
 
 div.logger-container{
