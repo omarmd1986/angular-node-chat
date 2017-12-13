@@ -1,0 +1,60 @@
+.chat-history .message-data {
+    margin-bottom: 15px;
+  }
+  .chat-history .message-data-time {
+    color: #a8aab1;
+    padding-left: 6px;
+    font-size: 80%;
+  }
+  .chat-history .message {
+    color: white;
+    padding: 18px 20px;
+    line-height: 26px;
+    font-size: 16px;
+    margin-bottom: 30px;
+    /*width: 90%;*/
+    position: relative;
+  }
+  .chat-history .message:after {
+    bottom: 100%;
+    left: 7%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-bottom-color: #86BB71;
+    border-width: 10px;
+    margin-left: -10px;
+  }
+   .chat-history .my-message {
+    background: #86BB71;
+  }
+  .chat-message, .room .room-create {
+    padding: 20px;
+  }
+  .chat-message textarea, .room .room-create input {
+    width: 100%;
+    border: none;
+    padding: 10px 20px;
+    font: 14px/22px "Roboto", Arial, sans-serif;
+    margin-bottom: 10px;
+    resize: none;
+  }
+
+  .form button:hover,.form button:active,.form button:focus {
+    background: #89c771;
+  }
+  .form .message, .room-create .message {
+    margin: 15px 0 0;
+    color: #b3b3b3;
+    font-size: 12px;
+  }
+  .form .message a {
+    color: #86BB71;
+    text-decoration: none;
+  }
+  .form .register-form {
+    display: none;
+  }

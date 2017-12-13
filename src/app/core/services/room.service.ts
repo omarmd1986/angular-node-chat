@@ -21,9 +21,9 @@ export class RoomService {
   /**
    * Getting all public rooms
    */
-  roomsPublic(): Observable<[Room]> {
+  roomsPublic(): Observable<Room[]> {
     let req = this.http.get<any>(`${Config.API_URL}/room`, this.jwt.httpOptions());
-    return this.logger.handleRequest<[Room]>(req, ``, null);
+    return this.logger.handleRequest<Room[]>(req, ``, []);
   }
 
   room(roomId: string): Observable<Room> {
@@ -52,9 +52,9 @@ export class RoomService {
   /**
    * Getting all, public and private rooms
    */
-  rooms(): Observable<[Room]> {
+  rooms(): Observable<Room[]> {
     let req = this.http.get<any>(`${Config.API_URL}/admin/room`, this.jwt.httpOptions());
-    return this.logger.handleRequest<[Room]>(req, ``, null);
+    return this.logger.handleRequest<Room[]>(req, ``, []);
   }
   
   adminRoom(roomId: string): Observable<Room> {

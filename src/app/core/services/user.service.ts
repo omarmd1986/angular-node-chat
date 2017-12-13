@@ -29,9 +29,9 @@ export class UserService {
   /**
    * Getting the login user's rooms
    */
-  myRooms(): Observable<[Room]>{
+  myRooms(): Observable<Room[]>{
     let req = this.http.get<any>(`${Config.API_URL}/user/me/rooms`, this.jwt.httpOptions());
-    return this.logger.handleRequest<[Room]>(req, `Getting the login user's rooms`, null);
+    return this.logger.handleRequest<Room[]>(req, `Getting the login user's rooms`, []);
   }
 
   /**
@@ -46,9 +46,9 @@ export class UserService {
   /**
    * Getting all the users.
    */
-  users(): Observable<[LoginUser]> {
+  users(): Observable<LoginUser[]> {
     let req = this.http.get<any>(`${Config.API_URL}/admin/user/`, this.jwt.httpOptions());
-    return this.logger.handleRequest<[LoginUser]>(req, 'Getting all the users', null);
+    return this.logger.handleRequest<LoginUser[]>(req, 'Getting all the users', []);
   }
 
   /**
@@ -82,8 +82,8 @@ export class UserService {
    * Getting all the users' rooms
    * @param userId 
    */
-  rooms(userId: string): Observable<[Room]> {
+  rooms(userId: string): Observable<Room[]> {
     let req = this.http.get<any>(`${Config.API_URL}/admin/user/${userId}/rooms`, this.jwt.httpOptions());
-    return this.logger.handleRequest<[Room]>(req, `Getting all the users' rooms`, null);
+    return this.logger.handleRequest<Room[]>(req, `Getting all the users' rooms`, []);
   }
 }

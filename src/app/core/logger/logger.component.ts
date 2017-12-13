@@ -16,4 +16,10 @@ export class LoggerComponent implements OnInit {
   ) { }
 
   ngOnInit() { }
+
+  isVisible(message: any): boolean{
+    if(!this.show || this.show == '') return true;
+    let split = this.show.split(',');
+    return split.indexOf(message.type.toLowerCase()) !== -1;
+  }
 }

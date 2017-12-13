@@ -11,7 +11,9 @@ var findOrCreate = function (data, callback) {
 	UserHasRoomModel.findOne({
 		user: data.user_id,
 		room: data.room_id
-	}, function (err, user_room) {
+	})
+	.populate('room')
+	.exec(function (err, user_room) {
 		if (err) { return callback(err); }
 		if (user_room) {
 			return callback(err, user_room);

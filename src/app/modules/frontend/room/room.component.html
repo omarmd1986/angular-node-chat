@@ -1,4 +1,28 @@
-<p>
-  room works!
-</p>
-<h2>{{roomId}}</h2>
+<div class="row" *ngIf="room">
+  <h3>{{ room.title }}</h3>
+  <p>{{ room.description }}</p>
+</div>
+
+<div class="row">
+
+  <ul class="chat-history">
+    <li class="media animated slideInUp" *ngFor="let m of buffer">
+      <div class="media">
+        <div [ngClass]="{ 'media-right' : true, 'media-left' : false, 'media-middle' : true }">
+          <a href="#">
+            <img class="media-object img-circle" width="50" src="{{ m.user.picture }}">
+          </a>
+        </div>
+        <div class="media-body">
+          <div class="message-data">
+            <span class="message-data-name">{{ m.user.username }}</span>
+            <span class="message-data-time">{{ m.date | date }}</span>
+          </div>
+          <div class="message my-message" dir="auto">{{ m.text }}</div>
+        </div>
+      </div>
+
+    </li>
+  </ul>
+
+</div>
