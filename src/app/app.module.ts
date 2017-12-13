@@ -28,12 +28,12 @@ import { AppRoutingModule } from "./app-routing.module";
     }),
 
     LoadingModule.forRoot({
-      animationType: ANIMATION_TYPES.circleSwish,
-      // backdropBackgroundColour: 'rgba(0,0,0,0.1)',
-      // backdropBorderRadius: '4px',
-      // primaryColour: '#ffffff',
-      // secondaryColour: '#ffffff',
-      // tertiaryColour: '#ffffff'
+      animationType: ANIMATION_TYPES.threeBounce,
+      backdropBackgroundColour: 'rgba(0,0,0,0.4)',
+      backdropBorderRadius: '24px',
+      primaryColour: 'red',
+      secondaryColour: 'blue',
+      tertiaryColour: 'green'
     }),
 
     AppRoutingModule
