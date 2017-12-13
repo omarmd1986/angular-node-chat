@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { LoggerService } from "../services/logger.service";
 
@@ -9,16 +9,11 @@ import { LoggerService } from "../services/logger.service";
 })
 export class LoggerComponent implements OnInit {
 
+  @Input() show: string = '';
+
   constructor(
     public loggerSrc: LoggerService
   ) { }
 
   ngOnInit() { }
-
-  remove(index: number): void {
-    console.log(this.loggerSrc.messages)
-    this.loggerSrc.remove(index);
-    console.log(this.loggerSrc.messages)
-  }
-
 }

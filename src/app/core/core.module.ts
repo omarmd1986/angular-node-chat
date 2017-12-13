@@ -12,12 +12,13 @@ import { MessageService } from './services/message.service';
 import { RoomsListComponent } from './rooms-list/rooms-list.component';
 import { LoggerComponent } from './logger/logger.component';
 import { LoaderService } from './services/loader.service';
+import { FilterLoggerMessagePipe } from './pipes/filter-logger-message.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
   ],
-  declarations: [RoomsListComponent, LoggerComponent],
+  declarations: [RoomsListComponent, LoggerComponent, FilterLoggerMessagePipe],
   exports: [RoomsListComponent, LoggerComponent],
   providers: [JwtHandlerService, LoggerService, NavigateService, AuthGuard, PusherService, RoomService, UserService, MessageService, LoaderService]
 })
