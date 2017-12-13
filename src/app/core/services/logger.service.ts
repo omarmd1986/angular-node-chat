@@ -4,14 +4,19 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 //This is for handle httpclients errors
-import { catchError, tap} from 'rxjs/operators';
+import { finalize, catchError, tap} from 'rxjs/operators';
 
 import { Message } from "../models/message";
+import { LoaderService } from "./loader.service";
 
 @Injectable()
 export class LoggerService {
 
   messages: Message[] = [];
+
+  constructor(
+    private loader: LoaderService
+  ) { }
   
   add(message: string | Message, type?: string): void{
     if(message instanceof Message){
@@ -55,12 +60,12 @@ export class LoggerService {
     return this.messages.length;
   }
 
-  constructor() { }
-
   handleRequest<T>(req: Observable<T>, message?: string, result?: T){
+    this.loader.loading = true;
     return req.pipe(
         tap(_ => this.add(message, 'info')),
-        catchError(this.handleError<T>(message, result))
+        catchError(this.handleError<T>(message, result)),
+        finalize(() => {this.loader.loading = false;})
     );
   }
 
