@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 //This is for handle httpclients errors
-import { finalize, catchError, tap} from 'rxjs/operators';
+import { delay, finalize, catchError, tap} from 'rxjs/operators';
 
 import { Message } from "../models/message";
 import { LoaderService } from "./loader.service";
@@ -61,11 +61,12 @@ export class LoggerService {
   }
 
   handleRequest<T>(req: Observable<T>, message?: string, result?: T){
-    this.loader.loading = true;
+    this.loader.show()
     return req.pipe(
         tap(_ => this.add(message, 'info')),
+        // delay(2000),
         catchError(this.handleError<T>(message, result)),
-        finalize(() => {this.loader.loading = false;})
+        finalize(() => {this.loader.stop()})
     );
   }
 

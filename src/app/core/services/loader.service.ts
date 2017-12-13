@@ -4,18 +4,38 @@ import { Router, NavigationEnd, NavigationError } from '@angular/router';
 @Injectable()
 export class LoaderService {
 
-  loading: boolean = true;
+  private _loading: boolean = true;
+  private _count: number = 0;
 
   constructor(
     private router: Router
-  ) { this.init() }
+  ) { }
 
   private init(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd || event instanceof NavigationError) {
-        this.loading = false;
+
       }
     });
+  }
+
+  loading(): boolean{
+    return this._loading;
+  }
+
+  show(): void{
+    if(this._count == 0){
+      this._loading = true;
+    }
+    this._count++;
+  }
+
+  stop(): void{
+    this._count--;
+    if(this._count == 0){
+      this._loading = false;
+    }
+    
   }
 
 }
