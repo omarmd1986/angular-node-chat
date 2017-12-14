@@ -30,9 +30,18 @@ var findOrCreate = function (data, callback) {
 var myPublicRooms = function (id, callback) {
 	UserHasRoomModel
 		.where('user').equals(id)
-		.populate('room')
-		.where('room.settings.is_active').equals(true)
-		.exec(callback);
+		.populate('room', null, {'settings.is_active': true, 'deleted_at' : null})
+		.exec(function(err, result){
+			if(err){
+				return callback(err, null);
+			}
+			// Filter by active..
+			// Filter by is_private is false or the user has access to the room
+			let actives = result.filter(r => (r.room !== null && (r.room.settings.is_private == false || r.room.settings.is_private.indexOf(id) !== -1 ) ));
+			// Taking only the room
+			let rooms = actives.map((r, index) => actives[index] = r.room);
+			callback(null, rooms);
+		});
 };
 
 var updateStatus = function(user, room, status, callback){
