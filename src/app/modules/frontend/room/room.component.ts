@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { PusherService, PusherMessage, UserService, Room, RoomService, JwtHandlerService, NavigateService, LoggerService } from "../../../core";
+import { PusherService, PusherMessage, UserService, Room, RoomService, JwtHandlerService, NavigateService, LoggerService, MessagesService } 
+from "../../../core";
 
 @Component({
   selector: 'app-room',
@@ -21,7 +22,8 @@ export class RoomComponent implements OnInit {
     private userSrc: UserService,
     private roomSrc: RoomService,
     private jwt: JwtHandlerService,
-    private navigate: NavigateService
+    private navigate: NavigateService,
+    private message: MessagesService
   ) { }
 
   ngOnInit() {
@@ -39,7 +41,7 @@ export class RoomComponent implements OnInit {
         return this.navigate.go('/rooms');
       } else {
         // Loading room info
-        this.roomSrc.room(this.roomId).subscribe(room => this.room = room );
+        this.roomSrc.room(this.roomId).subscribe(room => this.room = room);
         let self = this;
         this.pusher.subscriberRoom(this.roomId, function (data: PusherMessage) {
           console.log(data.user._id, self.me.id);
@@ -49,6 +51,13 @@ export class RoomComponent implements OnInit {
 
     });
 
+  }
+
+  send(text: any): void {
++    this.message.send(this.roomId, text.value).subscribe(res => {
+      console.log(res);
+    });
+    text.value = '';
   }
 
 }

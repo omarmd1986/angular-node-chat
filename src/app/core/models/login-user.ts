@@ -1,5 +1,5 @@
 export class LoginUser {
-    ID: string;
+    id: string;
     name: string;
     photo: string;
     socialID: string;

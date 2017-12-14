@@ -1,28 +1,35 @@
-<div class="row" *ngIf="room">
-  <h3>{{ room.title }}</h3>
-  <p>{{ room.description }}</p>
-</div>
-
 <div class="row">
 
-  <ul class="chat-history">
-    <li class="media animated slideInUp" *ngFor="let m of buffer">
-      <div class="media">
-        <div [ngClass]="{ 'media-right' : true, 'media-left' : false, 'media-middle' : true }">
-          <a href="#">
-            <img class="media-object img-circle" width="50" src="{{ m.user.picture }}">
-          </a>
+  <div class="panel panel-primary">
+    <div class="panel-heading" *ngIf="room">
+      <h3>{{ room.title }}</h3>
+      <p>{{ room.description }}</p>
+    </div>
+
+    <div class="panel-body">
+      <ul class="chat-history">
+        <li class="animated zoomIn" *ngFor="let m of buffer">
+          <frontend-chat-message [message]="m"></frontend-chat-message>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel-footer">
+
+      <div class="flex-container">
+        <div class="flex-item flex-item-text">
+          <textarea class="form-control" rows="3" #text></textarea>
         </div>
-        <div class="media-body">
-          <div class="message-data">
-            <span class="message-data-name">{{ m.user.username }}</span>
-            <span class="message-data-time">{{ m.date | date }}</span>
-          </div>
-          <div class="message my-message" dir="auto">{{ m.text }}</div>
+        <div class="flex-item flex-item-button">
+          <button class="btn btn-primary" (click)="send(text)">
+            <i class="glyphicon glyphicon-send"></i><br>
+            Send
+          </button>
         </div>
       </div>
 
-    </li>
-  </ul>
+    </div>
+
+  </div>
 
 </div>
