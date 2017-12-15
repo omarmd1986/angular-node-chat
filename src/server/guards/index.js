@@ -26,7 +26,7 @@ let roomFn = function (required, req, res, next) {
         if (room.is_private && _allowIds.indexOf(req.user.id) === -1) {
             return res.status(403).json({ message: "Private room." });
         }
-        next();
+        return next();
     });
 };
 
@@ -40,7 +40,7 @@ module.exports = {
             return res.status(423).json({ message: "User was banned in the server." });
         }
 
-        if (!req.room) { next(); }
+        if (!req.room) { return next(); }
 
         userRoomModel
             .findOrCreate({
@@ -53,16 +53,16 @@ module.exports = {
                 if (user_room.is_banned) {
                     return res.status(423).json({ message: "User was banned in this room." });
                 }
-                next();
+                return next();
             });
     },
 
     // Muted in all chat
     isMuted: function (req, res, next) {
         if (req.user.is_muted) {
-            return res.status(423).json({ message: "User was muted in the server." });
+            return res.status(412).json({ message: "User was muted in the server." });
         }
-        if (!req.room) { next(); }
+        if (!req.room) { return next(); }
 
         userRoomModel
             .findOrCreate({
@@ -73,9 +73,9 @@ module.exports = {
                     return res.status(404).json({ message: "Chat room not found." });
                 }
                 if (user_room.is_muted) {
-                    return res.status(423).json({ message: "User was muted in this room." });
+                    return res.status(412).json({ message: "User was muted in this room." });
                 }
-                next();
+                return next();
             });
 
     },
