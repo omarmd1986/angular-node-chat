@@ -13,6 +13,7 @@ import { RoomsListComponent } from './rooms-list/rooms-list.component';
 import { LoggerComponent } from './logger/logger.component';
 import { LoaderService } from './services/loader.service';
 import { ReadableTypePipe } from './pipes/readable-type.pipe';
+import { MessagesService } from './services/messages.service';
 
 @NgModule({
   imports: [
@@ -20,6 +21,6 @@ import { ReadableTypePipe } from './pipes/readable-type.pipe';
   ],
   declarations: [RoomsListComponent, LoggerComponent, ReadableTypePipe],
   exports: [RoomsListComponent, LoggerComponent],
-  providers: [JwtHandlerService, LoggerService, NavigateService, AuthGuard, PusherService, RoomService, UserService, MessageService, LoaderService]
+  providers: [JwtHandlerService, LoggerService, NavigateService, AuthGuard, PusherService, RoomService, UserService, MessageService, LoaderService, MessagesService]
 })
 export class CoreModule { }

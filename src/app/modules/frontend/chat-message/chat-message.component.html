@@ -1,0 +1,35 @@
+<div class="media" *ngIf="meMessage">
+
+  <div class="media-body">
+    <div class="message-data text-right">
+      <span class="message-data-name right">{{ message.user.username }}</span>
+      <span class="message-data-time right">{{ message.date | date }}</span>
+    </div>
+    <div class="message my-message right" dir="auto">{{ message.text }}</div>
+  </div>
+
+  <div class="media-middle media-right">
+    <a href="#">
+      <img class="media-object img-circle" width="50" src="{{ message.user.picture }}">
+    </a>
+  </div>
+
+</div>
+
+<div class="media" *ngIf="!meMessage">
+
+  <div class="media-middle media-left">
+    <a href="#">
+      <img class="media-object img-circle" width="50" src="{{ message.user.picture }}">
+    </a>
+  </div>
+
+  <div class="media-body">
+    <div class="message-data text">
+      <span class="message-data-name left">{{ message.user.username }}</span>
+      <span class="message-data-time left">{{ message.date | date }}</span>
+    </div>
+    <div class="message my-message left" dir="auto">{{ message.text }}</div>
+  </div>
+
+</div>

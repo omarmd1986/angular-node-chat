@@ -10,6 +10,7 @@ import { RoomsComponent } from './rooms/rooms.component';
 
 import { SideNavBarModule } from "../side-nav-bar/side-nav-bar.module";
 import { CoreModule } from "../../core/core.module";
+import { ChatMessageComponent } from './chat-message/chat-message.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { CoreModule } from "../../core/core.module";
     SideNavBarModule,
     CoreModule
   ],
-  declarations: [SecureComponent, RoomComponent, HeaderComponent, FooterComponent, RoomsComponent]
+  declarations: [SecureComponent, RoomComponent, HeaderComponent, FooterComponent, RoomsComponent, ChatMessageComponent]
 })
 export class FrontendModule { }

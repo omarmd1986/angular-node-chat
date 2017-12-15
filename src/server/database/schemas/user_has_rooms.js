@@ -21,11 +21,12 @@ let userHasRoomsSchema = new Schema({
         type: Schema.Types.Mixed, default: {
             recive_updates: true // If the user wants to revive updates in Push notifications
         }
-    },
-
-    connected_at: { type: Schema.Types.Date, default: Date.now },
-    disconnected_at: { type: Schema.Types.Date, default: null }
+    }
 });
+
+userHasRoomsSchema.methods.addMessage = function(message){
+    return this.messages.push(message);
+}
 
 let userHasRoomModel = Mongoose.model('user_has_room', userHasRoomsSchema);
 

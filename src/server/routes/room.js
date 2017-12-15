@@ -22,21 +22,14 @@ router.get('/:room?', guards.room, function (req, res) {
     }
 });
 
-router.put('/:room/connect', guards.requiredRoom, function (req, res) {
-    UserRoomModel.updateStatus(req.user.id, req.room.id, 'connected_at', function (err, userroom) {
+router.get('/:room/messages', guards.requiredRoom, function (req, res) {
+    let offset = req.query.offset,
+        limit = req.query.limit;
+    UserRoomModel.messages(req.room.id, {offset: offset, limit: limit}, function (err, messages) {
         if (err) {
-            return res.status(400).json({ message: 'Unable to change the status.' });
+            return res.status(400).json({ message: 'Imposible to fetch the room\'s messages.' });
         }
-        return res.json(userroom);
-    });
-});
-
-router.put('/:room/disconnect', guards.requiredRoom, function (req, res) {
-    UserRoomModel.updateStatus(req.user.id, req.room.id, 'disconnected_at', function (err, userroom) {
-        if (err) {
-            return res.status(400).json({ message: 'Unable to change the status.' });
-        }
-        return res.json(userroom);
+        res.json(messages);
     });
 });
 

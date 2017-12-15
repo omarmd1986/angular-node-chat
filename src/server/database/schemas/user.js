@@ -13,11 +13,17 @@ let UserSchema = new Schema({
     picture: { type: Schema.Types.String, default: config.default_user_picture },
     
     is_admin: { type: Schema.Types.Boolean, default: false, required: true },
-    forbidden: {type: Schema.Types.Mixed, default: {is_ban: false, is_mute: false}},
+    forbidden: {type: Schema.Types.Mixed, default: {
+        is_ban: false // User cannot enter to the system.
+        , is_mute: false // The user cannot write in a room
+    }},
     create_at: {type: Schema.Types.Date, default: Date.now},
 
-    //logs reference
-    logs: [{type: Schema.Types.ObjectId, ref: 'user_log'}],
+    connected_at: {type: Schema.Types.Date, default: null},
+    disconnect_at: {type: Schema.Types.Date, default: null},
+
+    // Logs
+    logs: [{type: Schema.Types.Mixed}],
 
     // rooms reference
     rooms: [{type: Schema.Types.ObjectId, ref: 'user_has_room'}]
@@ -54,18 +60,6 @@ UserSchema.pre('save', function (next) {
     next();
 });
 
-//Users Log
-
-let userLogSchema = new Schema({
-    action: {type: Schema.Types.String, required: true},
-    date: {type: Schema.Types.Date, default: Date.now},
-
-    // User reference
-    user: { type: Schema.Types.ObjectId, ref: 'user' },
-});
-
-let userLogModel = Mongoose.model('user_log', userLogSchema);
 var userModel = Mongoose.model('user', UserSchema);
 
-module.exports = userLogModel;
 module.exports = userModel;

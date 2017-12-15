@@ -14,6 +14,7 @@ export * from './services/pusher.service';
 export * from './services/user.service';
 export * from './services/room.service';
 export * from './services/loader.service';
+export * from './services/messages.service';
 
 export * from './guards/auth.guard';
 

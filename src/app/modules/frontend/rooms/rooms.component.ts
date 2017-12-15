@@ -9,8 +9,8 @@ import { UserService, RoomService, Room, LoginUser, NavigateService } from "../.
 })
 export class RoomsComponent implements OnInit {
 
-  myRooms: [Room];
-  publicRooms: [Room];
+  myRooms: Room[];
+  publicRooms: Room[];
 
   constructor(
     private userSrc: UserService,
@@ -23,24 +23,11 @@ export class RoomsComponent implements OnInit {
   }
 
   private init(): void{
-    this.userSrc.myRooms().subscribe((rooms: [Room] | null) => {
-      if(rooms == null){
-        // Some error...
-      }else{
-        this.myRooms = rooms;
-      }
-    });
-
-    this.roomSrc.roomsPublic().subscribe((rooms: [Room] | null) => {
-      if(rooms == null){
-        // some error
-      }else{
-        this.publicRooms = rooms;
-      }
-    });
+    this.userSrc.myRooms().subscribe((rooms: Room[]) => this.myRooms = rooms);
+    this.roomSrc.roomsPublic().subscribe((rooms: Room[]) => this.publicRooms = rooms);
   }
 
-  goRoom($event: any): void{
-    this.navigateSrc.go(`/room/${$event._id}`)
+  goRoom($room: any): void{
+    this.navigateSrc.go(`/room/${$room._id}`)
   }
 }
