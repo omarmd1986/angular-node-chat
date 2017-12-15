@@ -1,5 +1,7 @@
 'use strict';
 
+var moment = require('moment');
+
 var UserRoomModel = require('../database').models.user_has_room;
 var MessageModel = require('../database').models.message;
 
@@ -77,7 +79,11 @@ var messages = function (roomId, data, callback) {
 						return callback(err);
 					}
 					//Filling importan properties
-					messages.forEach(m => { m.user = ids[m.userRoom]; m.room = room_; });
+					messages.forEach(m => {
+						m.user = ids[m.userRoom];
+						m.room = room_;
+						m.date =  moment(m.created_at).utc().format();
+					});
 					messages.reverse();
 					callback(err, messages);
 				});

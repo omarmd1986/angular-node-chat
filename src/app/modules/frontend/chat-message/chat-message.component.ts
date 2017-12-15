@@ -10,6 +10,7 @@ import { JwtHandlerService, PusherMessage } from '../../../core/index';
 export class ChatMessageComponent implements OnInit {
 
   @Input() message: PusherMessage;
+  @Input() dateFormat: string = 'dddd, MMMM Do YYYY, h:mm:ss a';
 
   meMessage: boolean;
 

@@ -14,13 +14,14 @@ import { LoggerComponent } from './logger/logger.component';
 import { LoaderService } from './services/loader.service';
 import { ReadableTypePipe } from './pipes/readable-type.pipe';
 import { MessagesService } from './services/messages.service';
+import { FromUtcPipe } from './pipes/from-utc.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
   ],
-  declarations: [RoomsListComponent, LoggerComponent, ReadableTypePipe],
-  exports: [RoomsListComponent, LoggerComponent],
+  declarations: [RoomsListComponent, LoggerComponent, ReadableTypePipe, FromUtcPipe],
+  exports: [RoomsListComponent, LoggerComponent, FromUtcPipe],
   providers: [JwtHandlerService, LoggerService, NavigateService, AuthGuard, PusherService, RoomService, UserService, MessageService, LoaderService, MessagesService]
 })
 export class CoreModule { }

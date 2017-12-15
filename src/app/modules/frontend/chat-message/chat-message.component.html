@@ -3,7 +3,7 @@
   <div class="media-body">
     <div class="message-data text-right">
       <span class="message-data-name right">{{ message.user.username }}</span>
-      <span class="message-data-time right">{{ message.date | date }}</span>
+      <span class="message-data-time right">{{ message.date | fromUtc : dateFormat }}</span>
     </div>
     <div class="message my-message right" dir="auto">{{ message.text }}</div>
   </div>
@@ -27,7 +27,7 @@
   <div class="media-body">
     <div class="message-data text">
       <span class="message-data-name left">{{ message.user.username }}</span>
-      <span class="message-data-time left">{{ message.date | date }}</span>
+      <span class="message-data-time left">{{ message.date | fromUtc : dateFormat }}</span>
     </div>
     <div class="message my-message left" dir="auto">{{ message.text }}</div>
   </div>
