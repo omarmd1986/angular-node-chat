@@ -41,7 +41,11 @@
   }
 
   .my-message.right{
-    background: #86BB71 !important;
+    background: #8A6D3B !important;
+  }
+
+  .message.right:after{
+    border-bottom-color: #8A6D3B !important;
   }
 
 
