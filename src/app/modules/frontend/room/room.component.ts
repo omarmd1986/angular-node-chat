@@ -62,4 +62,10 @@ export class RoomComponent implements OnInit {
     text.value = '';
   }
 
+  keyUp($event: KeyboardEvent, text: any): void {
+    if($event.keyCode == 13){
+      this.send(text);
+    } // enter key code
+  }
+
 }
