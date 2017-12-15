@@ -1,14 +1,14 @@
 'use strict'
 
-let userModel = require('../database').models.user;
-let roomModel = require('../database').models.room;
+let roomModel = require('../models/room');
+let userRoomModel = require('../models/user_has_room');
 
 let roomFn = function (required, req, res, next) {
     let id = req.params.room;
     if (!id) {
-        return required 
-        ? res.status(404).json({ message: "Room not found." })
-        : next();
+        return required
+            ? res.status(404).json({ message: "Room not found." })
+            : next();
     }
     roomModel.findById(id, function (err, room) {
         if (err || !room) {
@@ -31,18 +31,53 @@ let roomFn = function (required, req, res, next) {
 };
 
 module.exports = {
-    banned: function (req, res, next) {
+    isBanned: function (req, res, next) {
         if (!req.user) {
             return res.status(404).json({ message: "User not found." });
         }
-        let user = new userModel(req.user);
-
         // Virtual property
-        if (user.is_banned) {
+        if (req.user.is_banned) {
             return res.status(423).json({ message: "User was banned in the server." });
         }
 
-        next();
+        if (!req.room) { next(); }
+
+        userRoomModel
+            .findOrCreate({
+                user_id: req.user.id,
+                room_id: req.room.id
+            }, function (err, user_room) {
+                if (err) {
+                    return res.status(404).json({ message: "Chat room not found." });
+                }
+                if (user_room.is_banned) {
+                    return res.status(423).json({ message: "User was banned in this room." });
+                }
+                next();
+            });
+    },
+
+    // Muted in all chat
+    isMuted: function (req, res, next) {
+        if (req.user.is_muted) {
+            return res.status(423).json({ message: "User was muted in the server." });
+        }
+        if (!req.room) { next(); }
+
+        userRoomModel
+            .findOrCreate({
+                user_id: req.user.id,
+                room_id: req.room.id
+            }, function (err, user_room) {
+                if (err) {
+                    return res.status(404).json({ message: "Chat room not found." });
+                }
+                if (user_room.is_muted) {
+                    return res.status(423).json({ message: "User was muted in this room." });
+                }
+                next();
+            });
+
     },
 
     requiredRoom: function (req, res, next) {

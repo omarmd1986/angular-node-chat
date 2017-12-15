@@ -7,7 +7,7 @@ var RoomModel = require('../models/room');
 var UserRoomModel = require('../models/user_has_room');
 var guards = require('../guards');
 
-router.get('/:room?', guards.room, function (req, res) {
+router.get('/:room?', guards.room, guards.isBanned, function (req, res) {
     let id = req.params.room;
     let fn = function (err, rooms) {
         if (err) {
@@ -22,7 +22,7 @@ router.get('/:room?', guards.room, function (req, res) {
     }
 });
 
-router.get('/:room/messages', guards.requiredRoom, function (req, res) {
+router.get('/:room/messages', guards.requiredRoom, guards.isBanned, function (req, res) {
     let offset = req.query.offset,
         limit = req.query.limit;
     UserRoomModel.messages(req.room.id, {offset: offset, limit: limit}, function (err, messages) {

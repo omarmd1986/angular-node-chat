@@ -33,7 +33,7 @@ router.get('/me/rooms', function (req, res) {
 /**
  * Add a room to the user
  */
-router.post('/room/:room', guards.requiredRoom, function (req, res) {
+router.post('/room/:room', guards.requiredRoom, guards.isBanned, function (req, res) {
     UserHasRoom.findOrCreate({
         user_id: req.user.id,
         room_id: req.room.id
@@ -48,7 +48,7 @@ router.post('/room/:room', guards.requiredRoom, function (req, res) {
 /**
  * Send the message to the room
  */
-router.post('/sent/message/:room', guards.requiredRoom, function(req, res){
+router.post('/sent/message/:room', guards.requiredRoom, guards.isBanned, guards.isMuted, function(req, res){
 
     // save the message
     UserHasRoom.addMessage(req.user.id, req.params.room, { text: req.body.text }, function(err, message){

@@ -28,6 +28,15 @@ userHasRoomsSchema.methods.addMessage = function(message){
     return this.messages.push(message);
 }
 
+// Virtual Properties
+userHasRoomsSchema.virtual('is_banned').get(function(){
+    return this.forbidden.is_ban;
+});
+
+userHasRoomsSchema.virtual('is_muted').get(function(){
+    return this.forbidden.is_mute;
+});
+
 let userHasRoomModel = Mongoose.model('user_has_room', userHasRoomsSchema);
 
 module.exports = userHasRoomModel;
