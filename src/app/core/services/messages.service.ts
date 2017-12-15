@@ -16,7 +16,7 @@ export class MessagesService {
   ) { }
 
   send(roomId: string, text: string): Observable<any> {
-    let req = this.http.post<any>(`${Config.API_URL}/message/${roomId}`, {text: text}, this.jwt.httpOptions());
+    let req = this.http.post<any>(`${Config.API_URL}/user/sent/message/${roomId}`, {text: text}, this.jwt.httpOptions());
     return this.logger.handleRequest<any>(req, 'Sending message to room.', null);
   }
 

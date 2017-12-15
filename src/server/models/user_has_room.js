@@ -46,9 +46,8 @@ var myPublicRooms = function (id, callback) {
 };
 
 var messages = function (roomId, data, callback) {
-	let offset = data.offset | 0,
-		limit = data.limit | 50;
-
+	let offset = parseInt(data.offset || 0),
+		limit = parseInt(data.limit || 50);
 	UserRoomModel
 		.where('room').equals(roomId)
 		.populate('room', null, { 'settings.is_active': true, 'deleted_at': null })
@@ -65,11 +64,10 @@ var messages = function (roomId, data, callback) {
 			
 			MessageModel
 				.where('userRoom').in(ids)
-				.sort({created_at: 1})
+				.sort({created_at: -1})
 				.skip(offset)
 				.limit(limit)
 				.exec(callback);
-
 		});
 };
 
