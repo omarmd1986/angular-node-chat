@@ -48,24 +48,28 @@ var myPublicRooms = function (id, callback) {
 var messages = function (roomId, data, callback) {
 	let offset = data.offset | 0,
 		limit = data.limit | 50;
+
 	UserRoomModel
 		.where('room').equals(roomId)
-		.populate('user', 'username provider picture')
-		.select('user messages')
-		.exec(function (err, user_rooms) {
+		.populate('room', null, { 'settings.is_active': true, 'deleted_at': null })
+		.select('room')
+		.exec(function (err, result) {
 			if (err) {
 				return callback(err);
 			}
-			let messages = [];
-			user_rooms.forEach((item, index) => {
-				messages = messages.concat(item.messages);
-			});
+			// Filter by active..
+			// Filter by is_private is false or the user has access to the room
+			let actives = result.filter(r => (r.room !== null));
+			// Taking only the id
+			let ids = actives.map((r, index) => actives[index] = r.id);
+			
+			MessageModel
+				.where('userRoom').in(ids)
+				.sort({created_at: 1})
+				.skip(offset)
+				.limit(limit)
+				.exec(callback);
 
-			messages.sort((a, b) => {
-				return new Date(a.created_at) < new Date(b.created_at);
-			});
-
-			messages.splice()
 		});
 };
 
@@ -79,10 +83,8 @@ var addMessage = function (user_id, room_id, data, callback) {
 			return callback(err);
 		}
 		let message = new MessageModel(data);
-		user_room.messages.push(message);
-		user_room.save(function(err){
-			callback(err, message);
-		});
+		message.userRoom = user_room;
+		message.save(callback);
 	});
 };
 
