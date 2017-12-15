@@ -21,8 +21,8 @@ export class MessagesService {
   }
 
   fetch(roomId: string): Observable<any[]> {
-    let req = this.http.get<any>(`${Config.API_URL}/user/sent/message/${roomId}`, this.jwt.httpOptions());
-    return this.logger.handleRequest<any[]>(req, 'Sending message to room.', []);
+    let req = this.http.get<any>(`${Config.API_URL}/room/${roomId}/messages`, this.jwt.httpOptions());
+    return this.logger.handleRequest<any[]>(req, 'Fetching the messages.', []);
   }
 
 }

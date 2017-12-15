@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { PusherService, PusherMessage, UserService, Room, RoomService, JwtHandlerService, NavigateService, LoggerService, MessagesService } 
-from "../../../core";
+import { PusherService, PusherMessage, UserService, Room, RoomService, JwtHandlerService, NavigateService, LoggerService, MessagesService }
+  from "../../../core";
 
 @Component({
   selector: 'app-room',
@@ -23,7 +23,7 @@ export class RoomComponent implements OnInit {
     private roomSrc: RoomService,
     private jwt: JwtHandlerService,
     private navigate: NavigateService,
-    private message: MessagesService
+    private messageSrc: MessagesService
   ) { }
 
   ngOnInit() {
@@ -37,24 +37,26 @@ export class RoomComponent implements OnInit {
     this.userSrc.addRoom(this.roomId).subscribe(room => {
       this.room = room;
       if (room == null) {
-        //show an error....
         return this.navigate.go('/rooms');
       } else {
         // Loading room info
         this.roomSrc.room(this.roomId).subscribe(room => this.room = room);
-        let self = this;
-        this.pusher.subscriberRoom(this.roomId, function (data: PusherMessage) {
-          console.log(data.user._id, self.me.id);
-          self.buffer.push(data);
+        // Loading the messages
+        this.messageSrc.fetch(this.roomId).subscribe(messages => {
+          this.buffer = messages;
+          let self = this;
+          // Now subscribe to get WS messages...
+          this.pusher.subscriberRoom(this.roomId, function (data: PusherMessage) {
+            self.buffer.push(data);
+          });
         });
       }
-
     });
 
   }
 
   send(text: any): void {
-+    this.message.send(this.roomId, text.value).subscribe(res => {
+    this.messageSrc.send(this.roomId, text.value).subscribe(res => {
       console.log(res);
     });
     text.value = '';
