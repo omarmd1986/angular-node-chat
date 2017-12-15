@@ -7,8 +7,6 @@ var api = require('./api');
 var userRoute = require('./user');
 var adminUserRoute = require('./admin/user');
 
-var messageRoute = require('./messages');
-
 var roomRoute = require('./room');
 var adminRoomRoute = require('./admin/room');
 
@@ -26,9 +24,6 @@ var init = function (app) {
 	// The User endpoints.
 	app.use('/api/admin/user', Passport.authenticate('jwt'), guards.banned, guards.admin, adminUserRoute);
 	app.use('/api/user', Passport.authenticate('jwt'), guards.banned, userRoute);
-
-	// Message endpoint
-	app.use('/api/message', Passport.authenticate('jwt'), guards.banned, messageRoute);
 
 	// Room endpoints
 	app.use('/api/admin/room', Passport.authenticate('jwt'), guards.banned, guards.admin, adminRoomRoute);

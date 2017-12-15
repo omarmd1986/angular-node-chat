@@ -63,11 +63,18 @@ var findOrCreate = function (data, callback) {
 	});
 }
 
+var updateStatus = function(user_id, ptr, callback){
+	let obj = new Object();
+	obj[ptr] = Date.now();
+	userModel.findByIdAndUpdate(user_id, obj, callback);
+};
+
 module.exports = {
 	create,
 	findOne,
 	findById,
 	findOrCreate,
 	toggle,
-	findAll
+	findAll,
+	updateStatus,
 };

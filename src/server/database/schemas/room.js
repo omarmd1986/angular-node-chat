@@ -16,8 +16,8 @@ var RoomSchema = new Schema({
     created_at: { type: Schema.Types.Date, default: Date.now },
     deleted_at: { type: Schema.Types.Date, default: null },
 
-    //logs reference
-    logs: [{type: Schema.Types.ObjectId, ref: 'room_log'}],
+    // Logs
+    logs: [{type: Schema.Types.Mixed}],
     
     //users references
     users: [{type: Schema.Types.ObjectId, ref: 'user_has_room'}]
@@ -44,17 +44,6 @@ RoomSchema.virtual('is_message_require_approval').get(function(){
     return this.settings.message_require_approval;
 });
 
-// Rooms Log
-let roomLogSchema = new Schema({
-    action: {type: Schema.Types.String, required: true},
-    date: {type: Schema.Types.Date, default: Date.now},
-    
-    // Room reference
-    room: { type: Schema.Types.ObjectId, ref: 'room' },
-});
-
-var roomLogModel = Mongoose.model('room_log', roomLogSchema);
 var roomModel = Mongoose.model('room', RoomSchema);
 
-module.exports = roomLogModel;
 module.exports = roomModel;
