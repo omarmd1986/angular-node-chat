@@ -50,8 +50,9 @@ var messages = function (roomId, data, callback) {
 		limit = parseInt(data.limit || 50);
 	UserRoomModel
 		.where('room').equals(roomId)
-		.populate('room', null, { 'settings.is_active': true, 'deleted_at': null })
-		.select('room')
+		.populate('room', 'title description icon', { 'settings.is_active': true, 'deleted_at': null })
+		.populate('user', 'username picture')
+		.select('room user')
 		.exec(function (err, result) {
 			if (err) {
 				return callback(err);
@@ -59,15 +60,26 @@ var messages = function (roomId, data, callback) {
 			// Filter by active..
 			// Filter by is_private is false or the user has access to the room
 			let actives = result.filter(r => (r.room !== null));
-			// Taking only the id
-			let ids = actives.map((r, index) => actives[index] = r.id);
 			
+			// Taking the IDS
+			let ids = {};
+			let room_ = null; // Saving the room
+			actives.map((r, index) => {ids[r.id] = r.user; room_ = r.room;});
+
 			MessageModel
-				.where('userRoom').in(ids)
-				.sort({created_at: -1})
+				.where('userRoom').in(Object.getOwnPropertyNames(ids))
+				.sort({ created_at: -1 })
 				.skip(offset)
 				.limit(limit)
-				.exec(callback);
+				.lean() // Return simple javascript objects.
+				.exec(function (err, messages) {
+					if (err) {
+						return callback(err);
+					}
+					//Filling importan properties
+					messages.forEach(m => { m.user = ids[m.userRoom]; m.room = room_; });
+					callback(err, messages);
+				});
 		});
 };
 
