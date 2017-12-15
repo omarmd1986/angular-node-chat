@@ -78,6 +78,7 @@ var messages = function (roomId, data, callback) {
 					}
 					//Filling importan properties
 					messages.forEach(m => { m.user = ids[m.userRoom]; m.room = room_; });
+					messages.reverse();
 					callback(err, messages);
 				});
 		});
