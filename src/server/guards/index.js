@@ -20,7 +20,7 @@ let roomFn = function (required, req, res, next) {
             return next();
         }
         if (!room.is_activated) {
-            return res.status(403).json({ message: "Room is not active." });
+            return res.status(423).json({ message: "Room is not active." });
         }
         let _allowIds = room.settings.is_private;
         if (room.is_private && _allowIds.indexOf(req.user.id) === -1) {
@@ -37,7 +37,7 @@ module.exports = {
         }
         // Virtual property
         if (req.user.is_banned) {
-            return res.status(423).json({ message: "User was banned in the server." });
+            return res.status(401).json({ message: "User was banned in the server." });
         }
 
         if (!req.room) { return next(); }
@@ -51,7 +51,7 @@ module.exports = {
                     return res.status(404).json({ message: "Chat room not found." });
                 }
                 if (user_room.is_banned) {
-                    return res.status(423).json({ message: "User was banned in this room." });
+                    return res.status(406).json({ message: "User was banned in this room." });
                 }
                 return next();
             });

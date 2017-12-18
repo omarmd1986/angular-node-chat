@@ -4,7 +4,7 @@ import { Router, NavigationEnd, NavigationError } from '@angular/router';
 @Injectable()
 export class LoaderService {
 
-  private _loading: boolean = true;
+  private _loading: boolean = false;
   private _count: number = 0;
 
   constructor(
