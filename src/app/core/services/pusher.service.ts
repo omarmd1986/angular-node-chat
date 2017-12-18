@@ -15,9 +15,15 @@ export class PusherService {
     this.pusher = new Pusher(Config.pusherAppId, Config.pusherOpts);
   }
 
+  closeChannel(channel: string): void {
+    this.pusher.unsubscribe(channel)
+  }
+
   subscriberRoom(channel: string, callback: MessageCallback): void {
     var channelObj = this.pusher.subscribe(channel);
     channelObj.bind('message', callback);
+
+    return channelObj;
   }
 
 }
