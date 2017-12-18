@@ -10,7 +10,8 @@ import { NavigateService } from "../services/navigate.service";
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private jwt: JwtHandlerService
+    private jwt: JwtHandlerService,
+    private navigate: NavigateService
   ){ }
 
   canActivate(
@@ -18,7 +19,11 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> {
     //Here we can check is the user has loggin or not.
     return this.jwt.isLoggin().do(value => {
-      return value;
+      if(!value){
+        this.navigate.go('/login');
+        return false;
+      }
+      return true;
     });
   }
 }
