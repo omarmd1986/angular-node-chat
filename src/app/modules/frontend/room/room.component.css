@@ -19,23 +19,11 @@ ul {
 
 
   /* Send */
-  .flex-container{
-    display: flex;
-  }
-  .flex-item{
-    margin: 5px;
-  }
-  .flex-item-text{
-    order: 0;
-    flex-grow: 8;
-  }
-  .flex-item-text textarea{
+  .chat-text textarea{
     width: 100%;
     border-radius: 20px;
   }
-  .flex-item-button{
-    order: 1;
-    flex-grow: 0;
+  .chat-button{
     font-size: 20px;
   }
 

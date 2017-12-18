@@ -1,6 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { PusherService, PusherMessage, UserService, Room, RoomService, JwtHandlerService, NavigateService, LoggerService, MessagesService }
+import {
+  PusherService
+  , PusherMessage
+  , UserService
+  , Room
+  , RoomService
+  , JwtHandlerService
+  , NavigateService
+  , LoggerService
+  , MessagesService
+  , LoginUser
+}
   from "../../../core";
 
 @Component({
@@ -14,7 +25,8 @@ export class RoomComponent implements OnInit {
   roomId: any;
   room: Room;
   buffer: PusherMessage[] = [];
-  me;
+  users: LoginUser[] = [];
+  me: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,6 +53,8 @@ export class RoomComponent implements OnInit {
       } else {
         // Loading room info
         this.roomSrc.room(this.roomId).subscribe(room => this.room = room);
+        // Loading the users.
+        this.roomSrc.users(this.roomId).subscribe(users => { this.users = LoginUser.parseArr(users); console.log(this.users); });
         // Loading the messages
         this.messageSrc.fetch(this.roomId).subscribe(messages => {
           this.buffer = messages;
@@ -63,7 +77,7 @@ export class RoomComponent implements OnInit {
   }
 
   keyUp($event: KeyboardEvent, text: any): void {
-    if($event.keyCode == 13){
+    if ($event.keyCode == 13) {
       this.send(text);
     } // enter key code
   }

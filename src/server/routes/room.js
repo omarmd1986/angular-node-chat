@@ -33,4 +33,13 @@ router.get('/:room/messages', guards.requiredRoom, guards.isBanned, function (re
     });
 });
 
+router.get('/:room/users', guards.requiredRoom, guards.isBanned, function (req, res) {
+    UserRoomModel.users(req.room.id, function (err, users) {
+        if (err) {
+            return res.status(400).json({ message: 'Imposible to fetch the room\'s users.' });
+        }
+        res.json(users);
+    });
+});
+
 module.exports = router;

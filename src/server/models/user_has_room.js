@@ -62,11 +62,11 @@ var messages = function (roomId, data, callback) {
 			// Filter by active..
 			// Filter by is_private is false or the user has access to the room
 			let actives = result.filter(r => (r.room !== null));
-			
+
 			// Taking the IDS
 			let ids = {};
 			let room_ = null; // Saving the room
-			actives.map((r, index) => {ids[r.id] = r.user; room_ = r.room;});
+			actives.map((r, index) => { ids[r.id] = r.user; room_ = r.room; });
 
 			MessageModel
 				.where('userRoom').in(Object.getOwnPropertyNames(ids))
@@ -82,11 +82,33 @@ var messages = function (roomId, data, callback) {
 					messages.forEach(m => {
 						m.user = ids[m.userRoom];
 						m.room = room_;
-						m.date =  moment(m.created_at).utc().format();
+						m.date = moment(m.created_at).utc().format();
 					});
 					messages.reverse();
 					callback(err, messages);
 				});
+		});
+};
+
+var users = function (roomId, callback) {
+	UserRoomModel
+		.where('room').equals(roomId)
+		.populate('room', 'icon', { 'settings.is_active': true, 'deleted_at': null })
+		.populate('user')
+		.select('room user')
+		.exec(function (err, result) {
+			if (err) {
+				return callback(err);
+			}
+			// Filter by active..
+			// Filter by is_private is false or the user has access to the room
+			let actives = result.filter(r => (r.room !== null));
+
+			// Taking the IDS
+			let users = [];
+			actives.map((r, index) => { users[index] = r.user });
+
+			return callback(err, users);
 		});
 };
 
@@ -116,6 +138,7 @@ module.exports = {
 	findOrCreate,
 	myPublicRooms,
 	messages,
+	users,
 	addMessage,
 	updateMessage,
 };

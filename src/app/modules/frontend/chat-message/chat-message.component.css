@@ -10,7 +10,7 @@
     color: white;
     padding: 10px;
     line-height: 20px;
-    font-size: 16px;
+    font-size: 14px;
     margin-bottom: 30px;
     /*width: 90%;*/
     position: relative;
@@ -29,15 +29,16 @@
   }
 
   .message.right:after {
-    right: 7%;
+    right: 30%;
   }
   .message.left:after {
-    left: 7%;
+    left: 50%;
   }
   
   .my-message {
     background: #86BB71;
     border-radius: 10px;
+    display: table-cell;
   }
 
   .my-message.right{

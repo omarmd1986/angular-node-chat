@@ -32,31 +32,13 @@ export class RoomService {
   }
 
   /**
-   * The user connect to the room
-   * @param roomId 
-   */
-  roomConnect(roomId: string): Observable<Room> {
-    let req = this.http.put<any>(`${Config.API_URL}/room/${roomId}/connect`, null, this.jwt.httpOptions());
-    return this.logger.handleRequest<Room>(req, `The user connect to the room`, null);
-  }
-
-  /**
-   * The user disconnect to the room
-   * @param roomId 
-   */
-  roomDisconnect(roomId: string): Observable<Room> {
-    let req = this.http.put<any>(`${Config.API_URL}/room/${roomId}/disconnect`, null, this.jwt.httpOptions());
-    return this.logger.handleRequest<Room>(req, `The user disconnect to the room`, null);
-  }
-
-  /**
    * Getting all, public and private rooms
    */
   rooms(): Observable<Room[]> {
     let req = this.http.get<any>(`${Config.API_URL}/admin/room`, this.jwt.httpOptions());
     return this.logger.handleRequest<Room[]>(req, ``, []);
   }
-  
+
   adminRoom(roomId: string): Observable<Room> {
     let req = this.http.get<any>(`${Config.API_URL}/admin/room/${roomId}`, this.jwt.httpOptions());
     return this.logger.handleRequest<Room>(req, ``, null);
@@ -72,16 +54,21 @@ export class RoomService {
    * @param roomId  
    */
   toggleActive(roomId: string): Observable<boolean> {
-    let req = this.http.put<any>(`${Config.API_URL}/admin/room/${roomId}/toggle/active`, null, this.jwt.httpOptions());
+    let req = this.http.put<boolean>(`${Config.API_URL}/admin/room/${roomId}/toggle/active`, null, this.jwt.httpOptions());
     return this.logger.handleRequest<boolean>(req, ``, null);
   }
-  
+
   /**
    * The room needs some moderator approve the messages to be public
    * @param roomId 
    */
   toggleApproval(roomId: string): Observable<boolean> {
-    let req = this.http.put<any>(`${Config.API_URL}/admin/room/${roomId}/toggle/approval`, null, this.jwt.httpOptions());
+    let req = this.http.put<boolean>(`${Config.API_URL}/admin/room/${roomId}/toggle/approval`, null, this.jwt.httpOptions());
     return this.logger.handleRequest<boolean>(req, ``, null);
+  }
+
+  users(roomId: string): Observable<LoginUser[]> {
+    let req = this.http.get<LoginUser[]>(`${Config.API_URL}/room/${roomId}/users`, this.jwt.httpOptions());
+    return this.logger.handleRequest<LoginUser[]>(req, `Fetching users from room ${roomId}`, []);
   }
 }

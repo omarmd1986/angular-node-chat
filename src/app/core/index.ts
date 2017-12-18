@@ -20,3 +20,4 @@ export * from './guards/auth.guard';
 
 export * from './rooms-list/rooms-list.component';
 export * from './logger/logger.component';
+export * from './users-list/users-list.component';
