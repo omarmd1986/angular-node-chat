@@ -23,11 +23,11 @@ import {
 })
 
 export class RoomComponent implements OnInit, OnDestroy {
-  
+
   roomId: any;
   room: Room;
   buffer: PusherMessage[] = [];
-  
+
   me: any;
   userBuffer: LoginUserContainer = new LoginUserContainer();
   /**
@@ -40,6 +40,7 @@ export class RoomComponent implements OnInit, OnDestroy {
     private pusher: PusherService,
     private userSrc: UserService,
     private roomSrc: RoomService,
+    private loggerSrc: LoggerService,
     private jwt: JwtHandlerService,
     private navigate: NavigateService,
     private messageSrc: MessagesService
@@ -83,16 +84,25 @@ export class RoomComponent implements OnInit, OnDestroy {
 
     // Getting all online users in this room
     cbs.subscription_succeeded = (members: any) => {
+      self.loggerSrc.add(`${members.count} users online in this room`, 'info');
       members.each(function (member) {
         self.userBuffer.push(LoginUser.parse(member.info));
       });
     }
 
     // Adding new users to the list
-    cbs.member_added = (member: any) => self.userBuffer.push(LoginUser.parse(member.info));
+    cbs.member_added = (member: any) => {
+      let u = LoginUser.parse(member.info);
+      self.loggerSrc.add(`${u.name} has joined the room`, 'info');
+      self.userBuffer.push(u)
+    };
 
     // Remove a member
-    cbs.member_remove = (member: any) => self.userBuffer.remove(member.id);
+    cbs.member_remove = (member: any) => {
+      let u = LoginUser.parse(member.info);
+      self.loggerSrc.add(`${u.name} has left the room`, 'info');
+      self.userBuffer.remove(member.id)
+    };
 
     // Callback to get the messages
     cbs.message_event = (data: PusherMessage) => self.buffer.push(data);

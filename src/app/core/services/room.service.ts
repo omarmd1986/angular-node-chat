@@ -69,6 +69,6 @@ export class RoomService {
 
   users(roomId: string): Observable<LoginUser[]> {
     let req = this.http.get<LoginUser[]>(`${Config.API_URL}/room/${roomId}/users`, this.jwt.httpOptions());
-    return this.logger.handleRequest<LoginUser[]>(req, `Fetching users from room ${roomId}`, []);
+    return this.logger.handleRequest<LoginUser[]>(req, ``, []);
   }
 }

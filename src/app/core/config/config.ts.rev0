@@ -18,5 +18,5 @@ export const Config = {
     loginTwitter: `${url}/auth/twitter`,
     loginGoogle: `${url}/auth/google`,
 
-    messageSelfDestroy: 1500,
+    messageSelfDestroy: 5000,
 }
