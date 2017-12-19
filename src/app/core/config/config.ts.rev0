@@ -17,4 +17,6 @@ export const Config = {
     loginFacebook: `${url}/auth/facebook`,
     loginTwitter: `${url}/auth/twitter`,
     loginGoogle: `${url}/auth/google`,
+
+    messageSelfDestroy: 1500,
 }
