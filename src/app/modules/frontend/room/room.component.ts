@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import {
   PusherService
@@ -9,8 +9,10 @@ import {
   , JwtHandlerService
   , NavigateService
   , LoggerService
+  , pusherFnEvents
   , MessagesService
   , LoginUser
+  , LoginUserContainer
 }
   from "../../../core";
 
@@ -20,13 +22,18 @@ import {
   styleUrls: ['./room.component.css']
 })
 
-export class RoomComponent implements OnInit {
-
+export class RoomComponent implements OnInit, OnDestroy {
+  
   roomId: any;
   room: Room;
   buffer: PusherMessage[] = [];
-  users: LoginUser[] = [];
+  
   me: any;
+  userBuffer: LoginUserContainer = new LoginUserContainer();
+  /**
+   * Pusher channel
+   */
+  private _channel;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,24 +57,48 @@ export class RoomComponent implements OnInit {
       this.room = room;
       if (room == null) {
         return this.navigate.go('/rooms');
-      } else {
-        // Loading room info
-        this.roomSrc.room(this.roomId).subscribe(room => this.room = room);
-        // Loading the users.
-        this.roomSrc.users(this.roomId).subscribe(users => { this.users = LoginUser.parseArr(users); console.log(this.users); });
-        // Loading the messages
-        this.messageSrc.fetch(this.roomId).subscribe(messages => {
-          this.buffer = messages;
-          let self = this;
-          // Now subscribe to get WS messages...
-          this.pusher.subscriberRoom(this.roomId, function (data: PusherMessage) {
-            self.buffer.push(data);
-          });
-        });
       }
+
+      // Loading room info
+      this.roomSrc.room(this.roomId).subscribe(room => this.room = room);
+
+      // Subscriber to the pusher events
+      this._pusherFn();
+
     });
 
   }
+
+  ngOnDestroy(): void {
+    // disconnect the user
+    this.pusher.closeChannel(this._channel.name);
+  }
+
+  // Configure the channel
+  private _pusherFn = function () {
+    let self = this;
+
+    // Callbacks
+    let cbs = new pusherFnEvents();
+
+    // Getting all online users in this room
+    cbs.subscription_succeeded = (members: any) => {
+      members.each(function (member) {
+        self.userBuffer.push(LoginUser.parse(member.info));
+      });
+    }
+
+    // Adding new users to the list
+    cbs.member_added = (member: any) => self.userBuffer.push(LoginUser.parse(member.info));
+
+    // Remove a member
+    cbs.member_remove = (member: any) => self.userBuffer.remove(member.id);
+
+    // Callback to get the messages
+    cbs.message_event = (data: PusherMessage) => self.buffer.push(data);
+
+    self._channel = this.pusher.subscriberRoom(this.roomId, cbs);
+  };
 
   send(text: any): void {
     this.messageSrc.send(this.roomId, text.value).subscribe(res => {

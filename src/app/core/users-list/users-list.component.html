@@ -1,4 +1,4 @@
-<div class="media" *ngFor="let user of _users">
+<div class="media" *ngFor="let user of _users.getUsers()">
   <div class="media-middle media-left">
     <a (click)="click(user)">
       <img class="media-object img-circle" title="{{ user.name }}" width="50" src="{{ user.photo }}">

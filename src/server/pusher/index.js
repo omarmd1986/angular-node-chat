@@ -10,5 +10,6 @@ var sendMessage = function(room, message, callback){
 };
 
 module.exports = {
-    sendMessage
+    sendMessage,
+    pusher
 };
