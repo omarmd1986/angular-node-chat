@@ -1,7 +1,7 @@
 import { Output, EventEmitter } from "@angular/core";
 
 import { Config } from "../config/config";
-import { clearTimeout, setTimeout } from "timers";
+import { Container } from "./container";
 
 export class Message {
     title: string;
@@ -12,7 +12,7 @@ export class Message {
 
     private _selfDestroy: number = 0;
     private _cbRemoveMessage;
-    private _timer: NodeJS.Timer = null;
+    private _timer: any = null;
 
     constructor(title, body, type) {
         this.title = title;
@@ -46,4 +46,8 @@ export class Message {
         }
     }
 
+}
+
+export class MessageContainer extends Container<Message>{
+    
 }

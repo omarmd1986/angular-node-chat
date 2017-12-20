@@ -3,6 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import {
   PusherService
   , PusherMessage
+  , PusherMessageContainer
   , UserService
   , Room
   , RoomService
@@ -26,7 +27,7 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   roomId: any;
   room: Room;
-  buffer: PusherMessage[] = [];
+  buffer: PusherMessageContainer = new PusherMessageContainer();
 
   me: any;
   userBuffer: LoginUserContainer = new LoginUserContainer();
@@ -101,11 +102,13 @@ export class RoomComponent implements OnInit, OnDestroy {
     cbs.member_remove = (member: any) => {
       let u = LoginUser.parse(member.info);
       self.loggerSrc.add(`${u.name} has left the room`, 'info');
-      self.userBuffer.remove(member.id)
+      self.userBuffer.remove(u);
     };
 
     // Callback to get the messages
-    cbs.message_event = (data: PusherMessage) => self.buffer.push(data);
+    cbs.message_event = (data: PusherMessage) => {
+      self.buffer.push(data);
+    }
 
     self._channel = this.pusher.subscriberRoom(this.roomId, cbs);
   };
