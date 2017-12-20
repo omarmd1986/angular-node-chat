@@ -1,6 +1,3 @@
-ul {
-  list-style-type: none;
-}
   .form button:hover,.form button:active,.form button:focus {
     background: #89c771;
   }
@@ -17,6 +14,9 @@ ul {
     display: none;
   }
 
+  .container-body{
+    height: 67vh !important;
+  }
 
   /* Send */
   .chat-text textarea{

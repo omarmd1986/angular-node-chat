@@ -8,35 +8,24 @@
 
     <div class="panel-body">
 
-      <div class="flex-container">
-        <div class="flex-item-0" style="width: 100%;">
+      <div class="container-body row">
+        
+        <div #chatHistory class="body-item col-xs-9 col-md-10">
+          <frontend-chat-history [buffer]="buffer"></frontend-chat-history>
+        </div>
+
+        <div #chatUsers class="body-item col-xs-3 col-md-2">
           <core-users-list [users]="userBuffer"></core-users-list>
         </div>
 
-        <div class="flex-item-1">
-          <ul class="chat-history">
-            <li class="animated zoomIn" *ngFor="let m of buffer">
-              <frontend-chat-message [message]="m"></frontend-chat-message>
-            </li>
-          </ul>
-        </div>
       </div>
+
     </div>
 
     <div class="panel-footer">
-
-      <div class="flex-container">
-        <div class="flex-item-1 chat-text">
-          <textarea class="form-control" rows="3" #text (keyup)="keyUp($event, text)"></textarea>
-        </div>
-        <div class="flex-item-0 chat-button">
-          <button class="btn btn-primary" (click)="send(text)">
-            <i class="glyphicon glyphicon-send"></i>
-            <br> Send
-          </button>
-        </div>
-      </div>
-
+      
+      <frontend-writer-message (send)="send($event)"></frontend-writer-message>
+    
     </div>
 
   </div>

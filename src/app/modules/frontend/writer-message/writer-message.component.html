@@ -1,0 +1,11 @@
+<div class="flex-container">
+  <div class="flex-item-1 chat-text">
+    <textarea class="form-control" rows="3" #text (keyup)="keyUp($event, text)"></textarea>
+  </div>
+  <div class="flex-item-0 chat-button">
+    <button class="btn btn-primary" (click)="send(text)">
+      <i class="glyphicon glyphicon-send"></i>
+      <br> Send
+    </button>
+  </div>
+</div>

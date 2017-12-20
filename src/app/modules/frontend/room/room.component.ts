@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import {
   PusherService
@@ -14,6 +14,7 @@ import {
   , MessagesService
   , LoginUser
   , LoginUserContainer
+  , ChatMessage,
 }
   from "../../../core";
 
@@ -35,6 +36,9 @@ export class RoomComponent implements OnInit, OnDestroy {
    * Pusher channel
    */
   private _channel;
+
+  @ViewChild('chatUsers') chatUsers: ElementRef;
+  @ViewChild('chatHistory') chatHistory: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -105,6 +109,7 @@ export class RoomComponent implements OnInit, OnDestroy {
       let u = LoginUser.parse(member.info);
       self.loggerSrc.add(`${u.name} has joined the room`, 'info');
       self.userBuffer.push(u)
+      self.scrollToBottom(self.chatUsers);
     };
 
     // Remove a member
@@ -112,27 +117,27 @@ export class RoomComponent implements OnInit, OnDestroy {
       let u = LoginUser.parse(member.info);
       self.loggerSrc.add(`${u.name} has left the room`, 'info');
       self.userBuffer.remove(u);
+      self.scrollToBottom(self.chatUsers);
     };
 
     // Callback to get the messages
     cbs.message_event = (data: PusherMessage) => {
       self.buffer.push(data);
+      self.scrollToBottom(self.chatHistory);
     }
 
     self._channel = this.pusher.subscriberRoom(this.roomId, cbs);
   };
 
-  send(text: any): void {
-    this.messageSrc.send(this.roomId, text.value).subscribe(res => {
-      console.log(res);
-    });
-    text.value = '';
+  send(text: ChatMessage): void {
+    this.messageSrc.send(this.roomId, text.text).subscribe(res => { });
   }
 
-  keyUp($event: KeyboardEvent, text: any): void {
-    if ($event.keyCode == 13) {
-      this.send(text);
-    } // enter key code
+  private scrollToBottom(scroll: ElementRef): void {
+    try {
+      scroll.nativeElement.scrollToBottomTop = scroll.nativeElement.scrollHeight;
+    } catch (err) {
+      console.log(err);
+    }
   }
-
 }
