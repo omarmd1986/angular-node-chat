@@ -64,6 +64,9 @@ export class RoomComponent implements OnInit, OnDestroy {
       // Loading room info
       this.roomSrc.room(this.roomId).subscribe(room => this.room = room);
 
+      // Load the messages
+      this._loadMessages();
+
       // Subscriber to the pusher events
       this._pusherFn();
 
@@ -74,6 +77,12 @@ export class RoomComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // disconnect the user
     this.pusher.closeChannel(this._channel.name);
+  }
+
+  private _loadMessages(): void {
+    this.messageSrc.fetch(this.roomId).subscribe(messages => {
+      messages.forEach(m => this.buffer.push(m));
+    });
   }
 
   // Configure the channel
