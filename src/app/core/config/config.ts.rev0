@@ -6,8 +6,10 @@ export const Config = {
 
     pusherAppId: '',
     pusherOpts: {
-        cluster: '',
-        encrypted: true
+        cluster: 'us2',
+        encrypted: true,
+        authTransport: 'jsonp',
+        authEndpoint: `${url}/auth/pusher`,
     },
     
     API_URL: `${url}/api`,
@@ -15,4 +17,6 @@ export const Config = {
     loginFacebook: `${url}/auth/facebook`,
     loginTwitter: `${url}/auth/twitter`,
     loginGoogle: `${url}/auth/google`,
+
+    messageSelfDestroy: 5000,
 }

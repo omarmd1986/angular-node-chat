@@ -77,7 +77,7 @@ export class JwtHandlerService {
       return of(false);
     }
     let req = this.http.get<any>(this.checkJWT, this._httpOptions);
-    return this.logger.handleRequest<boolean>(req, 'Validating JWT', false);
+    return this.logger.handleRequest<boolean>(req, '', false);
   }
 
   private updateHeaders(jwt: string): void {

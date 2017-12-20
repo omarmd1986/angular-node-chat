@@ -9,6 +9,7 @@ import { delay, finalize, catchError, tap } from 'rxjs/operators';
 import { Message } from "../models/message";
 import { LoaderService } from "./loader.service";
 import { NavigateService } from "./navigate.service";
+import { isNumber, isObject } from 'util';
 
 @Injectable()
 export class LoggerService {
@@ -25,15 +26,10 @@ export class LoggerService {
       this.messages.push(message);
       return;
     }
-    if (message == '') {
-      return;
-    }
+    if (message == '') { return; }
 
-    let obj = new Message();
-
-    obj.title = '';
-    obj.body = message;
-    obj.type = type;
+    let obj = new Message('', message, type);
+    obj._clock.subscribe((m: Message) => this.remove(m));
 
     this.messages.push(obj);
   }
@@ -50,7 +46,14 @@ export class LoggerService {
     return result;
   }
 
-  remove(index: number): void {
+  remove(index: number | any): void {
+    let i = -1;
+    if (isNumber(index)) {
+      i = index;
+    } else if (isObject(index)) {
+      i = this.messages.indexOf(index);
+    }
+    if (i < 0) { return; }
     this.messages.splice(index, 1);
   }
 

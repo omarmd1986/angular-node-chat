@@ -1,3 +1,5 @@
+import { Container } from "./container";
+
 export class LoginUser {
     id: string;
     name: string;
@@ -23,3 +25,5 @@ export class LoginUser {
         return new LoginUser(obj);
     }
 }
+
+export class LoginUserContainer extends Container<LoginUser>{ }
