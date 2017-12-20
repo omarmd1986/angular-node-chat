@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { LoginUser } from "../models/login-user";
+import { LoginUser, LoginUserContainer } from "../models/login-user";
 
 @Component({
   selector: 'core-users-list',
@@ -9,7 +9,7 @@ import { LoginUser } from "../models/login-user";
 })
 export class UsersListComponent implements OnInit {
 
-  @Input('users') _users: LoginUser[] = [];
+  @Input('users') _users: LoginUserContainer;
   @Output('pick') _pick: EventEmitter<LoginUser> = new EventEmitter<LoginUser>();
 
   constructor() { }

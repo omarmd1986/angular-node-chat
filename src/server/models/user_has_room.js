@@ -4,6 +4,7 @@ var moment = require('moment');
 
 var UserRoomModel = require('../database').models.user_has_room;
 var MessageModel = require('../database').models.message;
+var RoomModel = require('../database').models.room;
 
 var create = function (data, callback) {
 	var newUserRoom = new UserRoomModel(data);
@@ -128,10 +129,27 @@ var addMessage = function (user_id, room_id, data, callback) {
 };
 
 var updateMessage = function (message_id, data, callback) {
-
 	MessageModel
 		.findByIdAndUpdate(message_id, data, callback);
 };
+
+var privateRoom = function (ownerId, userId, callback) {
+	if(ownerId === userId){
+		return callback(new Error());
+	}
+	let rm = new RoomModel({
+		title: 'Private room',
+		description: '',
+		icon: '',
+		settings: {
+			message_require_approval: false, // Admin or moderator needs to aprove the messages.
+			is_active: true, // Is the rooms active?
+			is_private: [ownerId, userId] // False if is not private room. Array of users ID if is a private room. Private messages live here
+		}
+	});
+
+	rm.save(callback);
+}
 
 module.exports = {
 	create,
@@ -141,4 +159,5 @@ module.exports = {
 	users,
 	addMessage,
 	updateMessage,
+	privateRoom,
 };
