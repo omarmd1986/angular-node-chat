@@ -59,6 +59,7 @@ i, span {
     color: #fff;
     transition: all 0.5s;
     height: 100%;
+    position: fixed;
     font-family: 'Poppins', sans-serif !important;
 }
 

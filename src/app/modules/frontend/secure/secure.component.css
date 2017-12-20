@@ -8,10 +8,13 @@
 ----------------------------------------------------- */
 #content {
     padding: 20px;
-    min-height: 100vh;
-    transition: all 0.5s;
     padding-top: 70px;
+    padding-left: 270px;
+    min-height: 100vh;
+    max-height: 100vh;
+    transition: all 0.5s;
     flex: auto;
+    background-color: azure;
 }
 
 div.logger-container{
@@ -19,4 +22,10 @@ div.logger-container{
     bottom: 0px;
     z-index: 1000000000000000000;
     width: 100%;
+}
+
+@media (max-width: 768px) {
+    #content{
+        padding-left: 100px;
+    }
 }

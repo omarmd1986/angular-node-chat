@@ -49,4 +49,8 @@
     border-bottom-color: #8A6D3B !important;
   }
 
+  @media (max-width: 768px) {
+    .media-middle{display: none;}
+  }
+
 
