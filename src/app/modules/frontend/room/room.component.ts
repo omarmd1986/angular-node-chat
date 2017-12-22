@@ -14,7 +14,8 @@ import {
   , MessagesService
   , LoginUser
   , LoginUserContainer
-  , ChatMessage,
+  , ChatMessage
+  , Scroll
 }
   from "../../../core";
 
@@ -84,8 +85,10 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   private _loadMessages(): void {
+    var self = this;
     this.messageSrc.fetch(this.roomId).subscribe(messages => {
       messages.forEach(m => this.buffer.push(m));
+      Scroll.scrollToBottom(self.chatHistory);
     });
   }
 
@@ -109,7 +112,7 @@ export class RoomComponent implements OnInit, OnDestroy {
       let u = LoginUser.parse(member.info);
       self.loggerSrc.add(`${u.name} has joined the room`, 'info');
       self.userBuffer.push(u)
-      self.scrollToBottom(self.chatUsers);
+      Scroll.scrollToBottom(self.chatUsers);
     };
 
     // Remove a member
@@ -117,13 +120,12 @@ export class RoomComponent implements OnInit, OnDestroy {
       let u = LoginUser.parse(member.info);
       self.loggerSrc.add(`${u.name} has left the room`, 'info');
       self.userBuffer.remove(u);
-      self.scrollToBottom(self.chatUsers);
     };
 
     // Callback to get the messages
     cbs.message_event = (data: PusherMessage) => {
       self.buffer.push(data);
-      self.scrollToBottom(self.chatHistory);
+      Scroll.scrollToBottom(self.chatHistory);
     }
 
     self._channel = this.pusher.subscriberRoom(this.roomId, cbs);
@@ -132,12 +134,5 @@ export class RoomComponent implements OnInit, OnDestroy {
   send(text: ChatMessage): void {
     this.messageSrc.send(this.roomId, text.text).subscribe(res => { });
   }
-
-  private scrollToBottom(scroll: ElementRef): void {
-    try {
-      scroll.nativeElement.scrollToBottomTop = scroll.nativeElement.scrollHeight;
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  
 }

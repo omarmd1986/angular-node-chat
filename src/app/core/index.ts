@@ -8,6 +8,8 @@ export * from './models/pusher-message';
 export * from './models/message';
 export * from './models/chat-message';
 
+export * from './helpers/scroll';
+
 export * from './services/jwt-handler.service';
 export * from './services/logger.service';
 export * from './services/navigate.service';
