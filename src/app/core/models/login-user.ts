@@ -5,6 +5,8 @@ export class LoginUser {
     name: string;
     photo: string;
     socialID: string;
+    is_admin: boolean;
+    is_mod: boolean;
 
     constructor(data?: any) {
         if (!data) { return; }
@@ -13,6 +15,12 @@ export class LoginUser {
         this.name = data.username || data.name;
         this.photo = data.picture || data.photo;
         this.socialID = data.socialId || data.socialID;
+        this.is_admin = data.is_admin || false;
+        this.is_mod = data.is_mod || false;
+    }
+
+    title(): string{
+        return this.is_admin ? 'Admin' : this.is_mod ? 'Moderator' : '';
     }
 
     static parseArr(arr: any[]): LoginUser[] {

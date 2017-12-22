@@ -69,9 +69,6 @@ export class RoomComponent implements OnInit, OnDestroy {
       // Loading room info
       this.roomSrc.room(this.roomId).subscribe(room => this.room = room);
 
-      // Load the messages
-      this._loadMessages();
-
       // Subscriber to the pusher events
       this._pusherFn();
 
@@ -101,11 +98,20 @@ export class RoomComponent implements OnInit, OnDestroy {
 
     // Getting all online users in this room
     cbs.subscription_succeeded = (members: any) => {
+      // Loading previos messages
+      // Load the messages
+      this._loadMessages();
+
       self.loggerSrc.add(`${members.count} users online in this room`, 'info');
       members.each(function (member) {
         self.userBuffer.push(LoginUser.parse(member.info));
       });
     }
+
+    cbs.subscription_error = (status: number) => {
+      self.loggerSrc.add(`Cannot access to this room`, 'danger');
+      self.navigate.go('/rooms')
+    };
 
     // Adding new users to the list
     cbs.member_added = (member: any) => {

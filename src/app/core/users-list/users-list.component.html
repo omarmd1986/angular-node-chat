@@ -1,4 +1,4 @@
-<div class="media" *ngFor="let user of _users">
+<div class="media" *ngFor="let user of _users" [ngClass]="{'mod': user.is_mod, 'admin': user.is_admin}" [title]="user.title()">
   <div class="media-middle media-left">
     <a (click)="click(user)">
       <img class="media-object img-circle" title="{{ user.name }}" width="50" src="{{ user.photo }}">
@@ -6,6 +6,6 @@
   </div>
 
   <div class="media-body">
-      <b class="visible-sm-block visible-md-block visible-lg-block">{{ user.name }}</b>
+    <b class="visible-sm-block visible-md-block visible-lg-block">{{ user.name }}</b>
   </div>
 </div>

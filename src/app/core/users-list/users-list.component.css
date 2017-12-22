@@ -1,0 +1,11 @@
+.media{
+    border-radius: 50px;
+}
+
+.media.mod{
+    background-color: #86BB71;
+}
+
+.media.admin{
+    background-color: #8A6D3B;
+}

@@ -8,6 +8,7 @@ import { LoginUser } from '../models/login-user';
 
 export class pusherFnEvents {
   subscription_succeeded: (members: any[]) => any;
+  subscription_error: (status: number) => any;
   member_added: (member: any) => any;
   member_remove: (member: any) => any;
   message_event: (data: PusherMessage) => any;
@@ -46,6 +47,7 @@ export class PusherService {
     channelObj.bind('pusher:member_added', fns.member_added);
     channelObj.bind('pusher:member_removed', fns.member_remove);
     channelObj.bind('pusher:subscription_succeeded', fns.subscription_succeeded);
+    channelObj.bind('pusher:subscription_error', fns.subscription_error);
 
     // Binding messages
     channelObj.bind('message', fns.message_event);
