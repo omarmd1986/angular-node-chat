@@ -7,6 +7,7 @@ export * from './models/room';
 export * from './models/pusher-message';
 export * from './models/message';
 export * from './models/chat-message';
+export * from './models/action';
 
 export * from './helpers/scroll';
 

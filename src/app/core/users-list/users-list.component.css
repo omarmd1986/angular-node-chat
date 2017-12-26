@@ -1,5 +1,12 @@
 .media{
-    border-radius: 50px;
+    border-radius: 5px;
+}
+.media-left{
+    padding-left: 5px
+}
+
+.media-right{
+    padding-right: 5px
 }
 
 .media.mod{
@@ -8,4 +15,8 @@
 
 .media.admin{
     background-color: #8A6D3B;
+}
+
+.dropdown{
+    margin: 5px;
 }

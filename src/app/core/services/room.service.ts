@@ -71,4 +71,9 @@ export class RoomService {
     let req = this.http.get<LoginUser[]>(`${Config.API_URL}/room/${roomId}/users`, this.jwt.httpOptions());
     return this.logger.handleRequest<LoginUser[]>(req, ``, []);
   }
+
+  privateMessage(userId: string): Observable<Room>{
+    let req = this.http.post<Room>(`${Config.API_URL}/room/private/${userId}`,null, this.jwt.httpOptions());
+    return this.logger.handleRequest<Room>(req, ``, null);
+  }
 }

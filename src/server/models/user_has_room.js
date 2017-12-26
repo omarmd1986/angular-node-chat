@@ -6,11 +6,21 @@ var UserRoomModel = require('../database').models.user_has_room;
 var MessageModel = require('../database').models.message;
 var RoomModel = require('../database').models.room;
 
+/**
+ * 
+ * @param {*} data 
+ * @param {*} callback 
+ */
 var create = function (data, callback) {
 	var newUserRoom = new UserRoomModel(data);
 	newUserRoom.save(callback);
 };
 
+/**
+ * 
+ * @param {*} data 
+ * @param {*} callback 
+ */
 var findOrCreate = function (data, callback) {
 	UserRoomModel.findOne({
 		user: data.user_id,
@@ -31,6 +41,11 @@ var findOrCreate = function (data, callback) {
 		});
 }
 
+/**
+ * 
+ * @param {*} id 
+ * @param {*} callback 
+ */
 var myPublicRooms = function (id, callback) {
 	UserRoomModel
 		.where('user').equals(id)
@@ -48,6 +63,12 @@ var myPublicRooms = function (id, callback) {
 		});
 };
 
+/**
+ * 
+ * @param {*} roomId 
+ * @param {*} data 
+ * @param {*} callback 
+ */
 var messages = function (roomId, data, callback) {
 	let offset = parseInt(data.offset || 0),
 		limit = parseInt(data.limit || 50);
@@ -91,6 +112,11 @@ var messages = function (roomId, data, callback) {
 		});
 };
 
+/**
+ * 
+ * @param {*} roomId 
+ * @param {*} callback 
+ */
 var users = function (roomId, callback) {
 	UserRoomModel
 		.where('room').equals(roomId)
@@ -113,6 +139,13 @@ var users = function (roomId, callback) {
 		});
 };
 
+/**
+ * 
+ * @param {*} user_id 
+ * @param {*} room_id 
+ * @param {*} data 
+ * @param {*} callback 
+ */
 var addMessage = function (user_id, room_id, data, callback) {
 
 	findOrCreate({
@@ -128,27 +161,50 @@ var addMessage = function (user_id, room_id, data, callback) {
 	});
 };
 
+/**
+ * 
+ * @param {*} message_id 
+ * @param {*} data 
+ * @param {*} callback 
+ */
 var updateMessage = function (message_id, data, callback) {
 	MessageModel
 		.findByIdAndUpdate(message_id, data, callback);
 };
 
-var privateRoom = function (ownerId, userId, callback) {
-	if(ownerId === userId){
+/**
+ * Is like personal chat between two people
+ * @param {*} ownerId 
+ * @param {*} userId 
+ * @param {*} callback 
+ */
+var privateMessage = function (ownerId, userId, callback) {
+	if (ownerId === userId) {
 		return callback(new Error());
 	}
-	let rm = new RoomModel({
-		title: 'Private room',
-		description: '',
-		icon: '',
-		settings: {
-			message_require_approval: false, // Admin or moderator needs to aprove the messages.
-			is_active: true, // Is the rooms active?
-			is_private: [ownerId, userId] // False if is not private room. Array of users ID if is a private room. Private messages live here
-		}
-	});
 
-	rm.save(callback);
+	RoomModel
+		.where('settings.is_active').equals(true)
+		.where('settings.is_private').ne(false)
+		.where('settings.is_private').in([ownerId, userId])
+		.limit(1)
+		.exec(function (err, rooms) {
+			if (err) { return callback(err); }
+			if (rooms.length > 0) { return callback(err, rooms[0]); }
+			
+			let rm = new RoomModel({
+				title: 'Private message',
+				description: '',
+				icon: '',
+				settings: {
+					message_require_approval: false, // Admin or moderator needs to aprove the messages.
+					is_active: true, // Is the rooms active?
+					is_private: [ownerId, userId] // False if is not private room. Array of users ID if is a private room. Private messages live here
+				}
+			});
+			
+			rm.save(callback);
+		});
 }
 
 module.exports = {
@@ -159,5 +215,5 @@ module.exports = {
 	users,
 	addMessage,
 	updateMessage,
-	privateRoom,
+	privateMessage,
 };

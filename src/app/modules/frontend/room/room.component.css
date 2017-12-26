@@ -1,3 +1,5 @@
+  .panel-body{padding:9px;}
+  
   .form button:hover,.form button:active,.form button:focus {
     background: #89c771;
   }

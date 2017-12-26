@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, Injector } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import {
   PusherService
@@ -16,6 +16,8 @@ import {
   , LoginUserContainer
   , ChatMessage
   , Scroll
+  , ActionContainer
+  , Action
 }
   from "../../../core";
 
@@ -31,8 +33,10 @@ export class RoomComponent implements OnInit, OnDestroy {
   room: Room;
   buffer: PusherMessageContainer = new PusherMessageContainer();
 
-  me: any;
+  me: LoginUser | null;
   userBuffer: LoginUserContainer = new LoginUserContainer();
+
+  actions: ActionContainer;
   /**
    * Pusher channel
    */
@@ -49,10 +53,12 @@ export class RoomComponent implements OnInit, OnDestroy {
     private loggerSrc: LoggerService,
     private jwt: JwtHandlerService,
     private navigate: NavigateService,
-    private messageSrc: MessagesService
+    private messageSrc: MessagesService,
+    private injector: Injector
   ) { }
 
   ngOnInit() {
+
     this.roomId = this.route.snapshot.paramMap.get('id');
     this.me = this.jwt.user();
 
@@ -61,17 +67,14 @@ export class RoomComponent implements OnInit, OnDestroy {
     /* After the API return success, subscribes to the pusher, and the download the previous messages. */
 
     this.userSrc.addRoom(this.roomId).subscribe(room => {
-      this.room = room;
-      if (room == null) {
-        return this.navigate.go('/rooms');
-      }
+      if (room == null) { return this.navigate.go('/rooms'); }
 
-      // Loading room info
-      this.roomSrc.room(this.roomId).subscribe(room => this.room = room);
+      this.me.is_mod = room.is_mod || false;
+
+      this.room = room.room || null;
 
       // Subscriber to the pusher events
       this._pusherFn();
-
     });
 
   }
@@ -140,5 +143,4 @@ export class RoomComponent implements OnInit, OnDestroy {
   send(text: ChatMessage): void {
     this.messageSrc.send(this.roomId, text.text).subscribe(res => { });
   }
-  
 }

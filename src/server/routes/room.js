@@ -43,7 +43,7 @@ router.get('/:room/users', guards.requiredRoom, guards.isBanned, function (req, 
 });
 
 router.post('/private/:user', guards.isBanned, function (req, res) {
-    UserRoomModel.privateRoom(req.user.id, req.params.user, function (err, room) {
+    UserRoomModel.privateMessage(req.user.id, req.params.user, function (err, room) {
         if (err) {
             return res.status(400).json({ message: 'Imposible create a private room.' });
         }

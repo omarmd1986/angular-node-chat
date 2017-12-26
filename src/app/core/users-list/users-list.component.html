@@ -1,11 +1,25 @@
-<div class="media" *ngFor="let user of _users" [ngClass]="{'mod': user.is_mod, 'admin': user.is_admin}" [title]="user.title()">
-  <div class="media-middle media-left">
-    <a (click)="click(user)">
-      <img class="media-object img-circle" title="{{ user.name }}" width="50" src="{{ user.photo }}">
-    </a>
-  </div>
+<div class="dropdown" *ngFor="let user of _users">
+  <div class="media" [ngClass]="{'mod': user.is_mod, 'admin': user.is_admin}" [title]="user.title()" data-toggle="dropdown"
+    role="button" aria-haspopup="true" aria-expanded="false">
+    <div class="media-middle media-left">
+      <a (click)="click(user)">
+        <img class="media-object img-circle" title="{{ user.name }}" width="30" src="{{ user.photo }}">
+      </a>
+    </div>
 
-  <div class="media-body">
-    <b class="visible-sm-block visible-md-block visible-lg-block">{{ user.name }}</b>
+    <div class="media-body">
+      <b class="visible-sm-inline visible-md-inline visible-lg-inline">{{ user.name }}</b>
+    </div>
+    <div *ngIf="_actions && _actions.lenght() > 0" class="media-middle media-right">
+      <span class="caret"></span>
+    </div>
   </div>
+  
+  <ul *ngIf="_actions && _actions.lenght() > 0" class="dropdown-menu">
+    <li *ngFor="let act of _actions" [ngClass]="{'divider': act.type == ActionType.separator}">
+      <a *ngIf="act.type == ActionType.link" routerLink="{{ act.url }}">{{ act.text }}</a>
+      <a *ngIf="act.type == ActionType.action" (click)="act.fn($event, user)">{{ act.text }}</a>
+    </li>
+  </ul>
+
 </div>

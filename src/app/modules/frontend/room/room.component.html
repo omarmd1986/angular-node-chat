@@ -9,13 +9,20 @@
     <div class="panel-body">
 
       <div class="container-body row">
-        
+        <div class="col-xs-9 col-md-10">
+          <h4>Chat history</h4>
+        </div>
+        <div class="col-xs-3 col-md-2">
+            <h4>Users online</h4>
+          </div>
+          
         <div #chatHistory class="body-item col-xs-9 col-md-10">
           <frontend-chat-history [buffer]="buffer"></frontend-chat-history>
         </div>
 
+        
         <div #chatUsers class="body-item col-xs-3 col-md-2">
-          <core-users-list [users]="userBuffer"></core-users-list>
+          <frontend-room-user-list *ngIf="room" [users]="userBuffer" [user]="me"></frontend-room-user-list>
         </div>
 
       </div>

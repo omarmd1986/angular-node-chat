@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { LoggerService } from "../services/logger.service";
 import { JwtHandlerService } from "../services/jwt-handler.service";
 import { LoginUser } from "../models/login-user";
-import { Room } from "../models/room";
+import { Room, UserRoom } from "../models/room";
 import { Config } from "../config/config";
 
 import { Observable } from 'rxjs/Observable';
@@ -38,9 +38,9 @@ export class UserService {
    * Subscribe the room to the user.
    * @param roomId 
    */
-  addRoom(roomId: String): Observable<Room> {
-    let req = this.http.post<any>(`${Config.API_URL}/user/room/${roomId}`, null, this.jwt.httpOptions());
-    return this.logger.handleRequest<Room>(req, 'Subscribe the room to the user.', null);
+  addRoom(roomId: String): Observable<UserRoom> {
+    let req = this.http.post<UserRoom>(`${Config.API_URL}/user/room/${roomId}`, null, this.jwt.httpOptions());
+    return this.logger.handleRequest<UserRoom>(req, 'Subscribe the room to the user.', null);
   }
 
   /**

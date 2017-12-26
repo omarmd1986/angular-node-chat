@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { JwtHandlerService } from './services/jwt-handler.service';
 import { LoggerService } from './services/logger.service';
@@ -20,6 +21,7 @@ import { UsersListComponent } from './users-list/users-list.component';
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule
   ],
   declarations: [RoomsListComponent, LoggerComponent, ReadableTypePipe, FromUtcPipe, UsersListComponent],
   exports: [RoomsListComponent, LoggerComponent, FromUtcPipe, UsersListComponent],

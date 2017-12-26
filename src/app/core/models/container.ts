@@ -67,7 +67,6 @@ export class Container<T>{
         }
         return lenght;
     }
-
 }
 
 Container.prototype[Symbol.iterator] = function* () {
