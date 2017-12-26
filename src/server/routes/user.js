@@ -31,6 +31,19 @@ router.get('/me/rooms', function (req, res) {
 });
 
 /**
+ * 
+ */
+router.get('/me/chats', function (req, res) {
+    UserHasRoom
+        .myChats(req.user.id, function (err, rooms) {
+            if (err) {
+                return res.status(400).json({ message: 'Unable to find the user\'s chats' });
+            }
+            return res.json(rooms)
+        });
+});
+
+/**
  * Add a room to the user
  */
 router.post('/room/:room', guards.requiredRoom, guards.isBanned, function (req, res) {

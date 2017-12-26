@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { LoggerService } from "../services/logger.service";
 import { JwtHandlerService } from "../services/jwt-handler.service";
 import { LoginUser } from "../models/login-user";
-import { Room, UserRoom } from "../models/room";
+import { Room, UserRoom, RoomContainer } from "../models/room";
 import { Config } from "../config/config";
 
 import { Observable } from 'rxjs/Observable';
@@ -29,9 +29,9 @@ export class UserService {
   /**
    * Getting the login user's rooms
    */
-  myRooms(): Observable<Room[]>{
+  myRooms(): Observable<RoomContainer>{
     let req = this.http.get<any>(`${Config.API_URL}/user/me/rooms`, this.jwt.httpOptions());
-    return this.logger.handleRequest<Room[]>(req, `Getting the login user's rooms`, []);
+    return this.logger.handleRequest<RoomContainer>(req, `Getting the login user's rooms`, null);
   }
 
   /**
@@ -82,8 +82,8 @@ export class UserService {
    * Getting all the users' rooms
    * @param userId 
    */
-  rooms(userId: string): Observable<Room[]> {
+  rooms(userId: string): Observable<RoomContainer> {
     let req = this.http.get<any>(`${Config.API_URL}/admin/user/${userId}/rooms`, this.jwt.httpOptions());
-    return this.logger.handleRequest<Room[]>(req, `Getting all the users' rooms`, []);
+    return this.logger.handleRequest<RoomContainer>(req, `Getting all the users' rooms`, null);
   }
 }

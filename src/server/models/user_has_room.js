@@ -5,6 +5,7 @@ var moment = require('moment');
 var UserRoomModel = require('../database').models.user_has_room;
 var MessageModel = require('../database').models.message;
 var RoomModel = require('../database').models.room;
+var UserModel = require('../database').models.user;
 
 /**
  * 
@@ -49,14 +50,33 @@ var findOrCreate = function (data, callback) {
 var myPublicRooms = function (id, callback) {
 	UserRoomModel
 		.where('user').equals(id)
-		.populate('room', null, { 'settings.is_active': true, 'deleted_at': null })
+		.populate('room', null, { 'settings.is_active': true, 'settings.is_private': false, 'deleted_at': null })
+		.select('room')
 		.exec(function (err, result) {
 			if (err) {
 				return callback(err, null);
 			}
 			// Filter by active..
 			// Filter by is_private is false or the user has access to the room
-			let actives = result.filter(r => (r.room !== null && (r.room.settings.is_private == false || r.room.settings.is_private.indexOf(id) !== -1)));
+			let actives = result.filter(r => (r.room !== null));
+			// Taking only the room
+			let rooms = actives.map((r, index) => actives[index] = r.room);
+			callback(null, rooms);
+		});
+};
+
+var myChats = function (id, callback) {
+	UserRoomModel
+		.where('user').equals(id)
+		.populate('room', null, { 'settings.is_active': true, 'settings.is_private': {$ne: false}, 'deleted_at': null })
+		.select('room')
+		.exec(function (err, result) {
+			if (err) {
+				return callback(err, null);
+			}
+			// Filter by active..
+			// Filter by is_private is false or the user has access to the room
+			let actives = result.filter(r => (r.room !== null && r.room.settings.is_private.indexOf(id) !== -1));
 			// Taking only the room
 			let rooms = actives.map((r, index) => actives[index] = r.room);
 			callback(null, rooms);
@@ -183,34 +203,38 @@ var privateMessage = function (ownerId, userId, callback) {
 		return callback(new Error());
 	}
 
-	RoomModel
-		.where('settings.is_active').equals(true)
-		.where('settings.is_private').ne(false)
-		.where('settings.is_private').in([ownerId, userId])
-		.limit(1)
-		.exec(function (err, rooms) {
-			if (err) { return callback(err); }
-			if (rooms.length > 0) { return callback(err, rooms[0]); }
-			
-			let rm = new RoomModel({
-				title: 'Private message',
-				description: '',
-				icon: '',
-				settings: {
-					message_require_approval: false, // Admin or moderator needs to aprove the messages.
-					is_active: true, // Is the rooms active?
-					is_private: [ownerId, userId] // False if is not private room. Array of users ID if is a private room. Private messages live here
-				}
+	UserModel.findById(userId, function (err, user) {
+		if(err){ return callback(err); }
+		RoomModel
+			.where('settings.is_active').equals(true)
+			.where('settings.is_private').ne(false)
+			.where('settings.is_private').in([ownerId, userId])
+			.limit(1)
+			.exec(function (err, rooms) {
+				if (err) { return callback(err); }
+				if (rooms.length > 0) { return callback(err, rooms[0]); }
+
+				let rm = new RoomModel({
+					title: user.username,
+					description: '',
+					icon: user.picture,
+					settings: {
+						message_require_approval: false, // Admin or moderator needs to aprove the messages.
+						is_active: true, // Is the rooms active?
+						is_private: [ownerId, userId] // False if is not private room. Array of users ID if is a private room. Private messages live here
+					}
+				});
+
+				rm.save(callback);
 			});
-			
-			rm.save(callback);
-		});
+	});
 }
 
 module.exports = {
 	create,
 	findOrCreate,
 	myPublicRooms,
+	myChats,
 	messages,
 	users,
 	addMessage,

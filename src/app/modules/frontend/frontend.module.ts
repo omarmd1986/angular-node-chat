@@ -14,7 +14,6 @@ import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { ChatHistoryComponent } from './chat-history/chat-history.component';
 import { WriterMessageComponent } from './writer-message/writer-message.component';
 import { RoomUserListComponent } from './room-user-list/room-user-list.component';
-import { MyRoomsComponent } from './my-rooms/my-rooms.component';
 import { MyChatsComponent } from './my-chats/my-chats.component';
 
 @NgModule({
@@ -24,6 +23,6 @@ import { MyChatsComponent } from './my-chats/my-chats.component';
     SideNavBarModule,
     CoreModule
   ],
-  declarations: [SecureComponent, RoomComponent, HeaderComponent, FooterComponent, RoomsComponent, ChatMessageComponent, ChatHistoryComponent, WriterMessageComponent, RoomUserListComponent, MyRoomsComponent, MyChatsComponent]
+  declarations: [SecureComponent, RoomComponent, HeaderComponent, FooterComponent, RoomsComponent, ChatMessageComponent, ChatHistoryComponent, WriterMessageComponent, RoomUserListComponent, MyChatsComponent]
 })
 export class FrontendModule { }

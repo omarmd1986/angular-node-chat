@@ -7,4 +7,3 @@ export * from './rooms/rooms.component';
 export * from './chat-history/chat-history.component';
 export * from './writer-message/writer-message.component';
 export * from './my-chats/my-chats.component';
-export * from './my-rooms/my-rooms.component';

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService, RoomContainer } from '../../../core/index';
 
 @Component({
   selector: 'app-my-chats',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyChatsComponent implements OnInit {
 
-  constructor() { }
+  chats: RoomContainer
+
+  constructor(
+    private userSrc: UserService
+  ) { }
 
   ngOnInit() {
   }

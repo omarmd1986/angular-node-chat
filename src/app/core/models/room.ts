@@ -1,3 +1,5 @@
+import { Container } from "./container";
+
 export class Room {
     title: string;
     description: string;
@@ -13,6 +15,10 @@ export class Room {
         r.id = obj.id || obj._id || obj.ID || null;
         return r;
     }
+
+}
+
+export class RoomContainer extends Container<Room>{
 
 }
 

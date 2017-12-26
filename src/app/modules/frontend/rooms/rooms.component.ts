@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { UserService, RoomService, Room, LoginUser, NavigateService } from "../../../core/index";
+import { UserService, RoomService, Room, LoginUser, NavigateService, RoomContainer } from "../../../core/index";
 
 @Component({
   selector: 'app-rooms',
@@ -9,7 +9,8 @@ import { UserService, RoomService, Room, LoginUser, NavigateService } from "../.
 })
 export class RoomsComponent implements OnInit {
 
-  publicRooms: Room[];
+  myRooms: RoomContainer;
+  publicRooms: RoomContainer;
 
   constructor(
     private userSrc: UserService,
@@ -22,7 +23,8 @@ export class RoomsComponent implements OnInit {
   }
 
   private init(): void{
-    this.roomSrc.roomsPublic().subscribe((rooms: Room[]) => this.publicRooms = rooms);
+    this.userSrc.myRooms().subscribe((rooms: RoomContainer) => this.myRooms = rooms);
+    this.roomSrc.roomsPublic().subscribe((rooms: RoomContainer) => this.publicRooms = rooms);
   }
 
   goRoom($room: any): void{
