@@ -9,7 +9,6 @@ import { UserService, RoomService, Room, LoginUser, NavigateService } from "../.
 })
 export class RoomsComponent implements OnInit {
 
-  myRooms: Room[];
   publicRooms: Room[];
 
   constructor(
@@ -23,7 +22,6 @@ export class RoomsComponent implements OnInit {
   }
 
   private init(): void{
-    this.userSrc.myRooms().subscribe((rooms: Room[]) => this.myRooms = rooms);
     this.roomSrc.roomsPublic().subscribe((rooms: Room[]) => this.publicRooms = rooms);
   }
 

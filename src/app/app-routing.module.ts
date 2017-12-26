@@ -14,7 +14,7 @@ import { LoginModule, LoginComponent, LoginCallbackComponent, LogoutComponent } 
 import { DashboardModule, DashboardComponent } from "./modules/dashboard/index";
 
 // Frontend Module
-import { FrontendModule, SecureComponent, RoomsComponent, RoomComponent } from "./modules/frontend/index";
+import { FrontendModule, SecureComponent, RoomsComponent, RoomComponent, MyChatsComponent, MyRoomsComponent } from "./modules/frontend/index";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -28,6 +28,8 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'rooms', component: RoomsComponent },
+      { path: 'my/rooms', component: MyRoomsComponent },
+      { path: 'my/chats', component: MyChatsComponent },
       { path: 'room/:id', component: RoomComponent }
     ]
   },
@@ -37,10 +39,9 @@ const routes: Routes = [
 
 const items: Item[] = [
   {text: 'Dashboard', icon: 'glyphicon glyphicon-home', href:'/dashboard', childs:[]},
-  {text: 'Rooms', icon: 'glyphicon glyphicon-oil', href:'/rooms', childs:[]},
-  {text: 'Settings', icon: 'glyphicon glyphicon-cog', href:'', childs:[
-    {text: 'Password', href:'/password', icon:'glyphicon glyphicon-leaf'}
-  ]}
+  {text: 'Rooms', icon: 'glyphicon glyphicon-align-justify', href:'/rooms', childs:[]},
+  {text: 'My Rooms', icon: 'glyphicon glyphicon-th-large', href:'/my/rooms', childs:[]},
+  {text: 'My Chats', icon: 'glyphicon glyphicon-envelope', href:'/my/chats', childs:[]},
 ];
 
 @NgModule({
