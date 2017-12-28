@@ -60,7 +60,7 @@ export class UserService {
   }
 
   /**
-   * Getting information
+   * Return the user information based on :id
    * @param userId 
    */
   user(userId: string): Observable<LoginUser> {
@@ -93,6 +93,14 @@ export class UserService {
   rooms(userId: string): Observable<RoomContainer> {
     let req = this.http.get<any>(`${Config.API_URL}/admin/user/${userId}/rooms`, this.jwt.httpOptions());
     return this.logger.handleRequest<RoomContainer>(req, `Getting all the users' rooms`, null);
+  }
+
+  /**
+   * Getting the login user's chats
+   */
+  chats(userId: string): Observable<any>{
+    let req = this.http.get<any>(`${Config.API_URL}/admin/user/${userId}/chats`, this.jwt.httpOptions());
+    return this.logger.handleRequest<any>(req, `Getting all the user's chats`, null);
   }
 
   /**

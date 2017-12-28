@@ -11,7 +11,7 @@ var pusher = new Pusher(config.pusherOptions);
  * @param {function} callback 
  */
 var sendMessage = function(room, message, callback){
-    pusher.trigger(`presence-${room}`, 'message', message, null, callback);
+    pusher.trigger(`presence-${room}-room`, 'message', message, null, callback);
     // Send all online users register in that room a notification.
 };
 
@@ -20,7 +20,7 @@ var sendMessage = function(room, message, callback){
  * @param {string} userId 
  */
 var banned = function(userId){
-    pusher.trigger(userId, 'banned');
+    pusher.trigger(`precence-${userId}-system`, 'banned');
 }
 
 module.exports = {

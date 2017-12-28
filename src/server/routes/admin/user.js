@@ -68,7 +68,7 @@ router.get('/:id/rooms', function (req, res) {
     UserHasRoom
         .myPublicRooms(req.params.id, {
             limit: req.query.limit || 50,
-            offset: data.offset || 0
+            offset: req.query.offset || 0
         }, function (err, rooms) {
             if (err) {
                 return res.status(400).json({ message: 'Unable to find the user\'s rooms' });
