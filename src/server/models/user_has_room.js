@@ -9,8 +9,8 @@ var UserModel = require('../database').models.user;
 
 /**
  * 
- * @param {*} data 
- * @param {*} callback 
+ * @param {object} data 
+ * @param {function} callback 
  */
 var create = function (data, callback) {
 	var newUserRoom = new UserRoomModel(data);
@@ -18,9 +18,9 @@ var create = function (data, callback) {
 };
 
 /**
- * 
- * @param {*} data 
- * @param {*} callback 
+ * Find or create a new user_room from rooms chat
+ * @param {object} data 
+ * @param {function} callback 
  */
 var findOrCreate = function (data, callback) {
 	UserRoomModel.findOne({
@@ -44,13 +44,16 @@ var findOrCreate = function (data, callback) {
 
 /**
  * 
- * @param {*} id 
- * @param {*} callback 
+ * @param {string} id 
+ * @param {object} data 
+ * @param {function} callback 
  */
-var myPublicRooms = function (id, callback) {
+var myPublicRooms = function (id, data, callback) {
 	UserRoomModel
 		.where('user').equals(id)
 		.populate('room', null, { 'settings.is_active': true, 'settings.is_private': false, 'deleted_at': null })
+		.limit(data.limit)
+		.skip(data.offset)
 		.select('room')
 		.exec(function (err, result) {
 			if (err) {
@@ -65,33 +68,15 @@ var myPublicRooms = function (id, callback) {
 		});
 };
 
-var myChats = function (id, callback) {
-	UserRoomModel
-		.where('user').equals(id)
-		.populate('room', null, { 'settings.is_active': true, 'settings.is_private': {$ne: false}, 'deleted_at': null })
-		.select('room')
-		.exec(function (err, result) {
-			if (err) {
-				return callback(err, null);
-			}
-			// Filter by active..
-			// Filter by is_private is false or the user has access to the room
-			let actives = result.filter(r => (r.room !== null && r.room.settings.is_private.indexOf(id) !== -1));
-			// Taking only the room
-			let rooms = actives.map((r, index) => actives[index] = r.room);
-			callback(null, rooms);
-		});
-};
-
 /**
- * 
- * @param {*} roomId 
- * @param {*} data 
- * @param {*} callback 
+ * Return all the messages posted(approved)
+ * @param {string} roomId 
+ * @param {object} data 
+ * @param {function} callback 
  */
 var messages = function (roomId, data, callback) {
-	let offset = parseInt(data.offset || 0),
-		limit = parseInt(data.limit || 50);
+	let offset = parseInt(data.offset),
+		limit = parseInt(data.limit);
 	UserRoomModel
 		.where('room').equals(roomId)
 		.populate('room', 'title description icon', { 'settings.is_active': true, 'deleted_at': null })
@@ -160,11 +145,11 @@ var users = function (roomId, callback) {
 };
 
 /**
- * 
- * @param {*} user_id 
- * @param {*} room_id 
- * @param {*} data 
- * @param {*} callback 
+ * Add a message to the room
+ * @param {string} user_id 
+ * @param {string} room_id 
+ * @param {object} data The Message Model
+ * @param {function} callback 
  */
 var addMessage = function (user_id, room_id, data, callback) {
 
@@ -198,13 +183,13 @@ var updateMessage = function (message_id, data, callback) {
  * @param {*} userId 
  * @param {*} callback 
  */
-var privateMessage = function (ownerId, userId, callback) {
-	if (ownerId === userId) {
+var privateMessage = function (owner, userId, callback) {
+	if (owner.id === userId) {
 		return callback(new Error());
 	}
 
 	UserModel.findById(userId, function (err, user) {
-		if(err){ return callback(err); }
+		if (err) { return callback(err); }
 		RoomModel
 			.where('settings.is_active').equals(true)
 			.where('settings.is_private').ne(false)
@@ -215,9 +200,9 @@ var privateMessage = function (ownerId, userId, callback) {
 				if (rooms.length > 0) { return callback(err, rooms[0]); }
 
 				let rm = new RoomModel({
-					title: user.username,
+					title: 'private-message',
 					description: '',
-					icon: user.picture,
+					icon: '',
 					settings: {
 						message_require_approval: false, // Admin or moderator needs to aprove the messages.
 						is_active: true, // Is the rooms active?
@@ -234,7 +219,6 @@ module.exports = {
 	create,
 	findOrCreate,
 	myPublicRooms,
-	myChats,
 	messages,
 	users,
 	addMessage,

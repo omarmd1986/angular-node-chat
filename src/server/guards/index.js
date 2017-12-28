@@ -4,7 +4,7 @@ let roomModel = require('../models/room');
 let userRoomModel = require('../models/user_has_room');
 
 let roomFn = function (required, req, res, next) {
-    let id = req.params.room;
+    let id = req.params.room || req.body.room || req.query.room;
     if (!id) {
         return required
             ? res.status(404).json({ message: "Room not found." })

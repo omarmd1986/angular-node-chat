@@ -5,10 +5,12 @@ var Mongoose = require('mongoose');
 let Schema = Mongoose.Schema;
 
 let userHasRoomsSchema = new Schema({
-    // User reference
+    // User reference (To if is a chat)
     user: { type: Schema.Types.ObjectId, ref: 'user' },
+    // User reference (from if is a chat)
+    from: { type: Schema.Types.ObjectId, ref: 'user', default: null },
     // Room reference
-    room: { type: Schema.Types.ObjectId, ref: 'room' },
+    room: { type: Schema.Types.ObjectId, ref: 'room', default: null },
     // Messages reference
     messages: [{type: Schema.Types.ObjectId, ref: 'message'}],
     
@@ -17,6 +19,8 @@ let userHasRoomsSchema = new Schema({
     // To room level
     forbidden: {type: Schema.Types.Mixed, default: {is_ban: false, is_mute: false}},
     
+    create_at: {type: Schema.Types.Date, default: Date.now},
+
     settings: {
         type: Schema.Types.Mixed, default: {
             recive_updates: true // If the user wants to revive updates in Push notifications

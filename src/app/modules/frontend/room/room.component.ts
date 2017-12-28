@@ -18,6 +18,7 @@ import {
   , Scroll
   , ActionContainer
   , Action
+  , roomFnEvents
 }
   from "../../../core";
 
@@ -81,7 +82,7 @@ export class RoomComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     // disconnect the user
-    this.pusher.closeChannel(this._channel.name);
+    this.pusher.closeChannel(this._channel);
   }
 
   private _loadMessages(): void {
@@ -97,7 +98,7 @@ export class RoomComponent implements OnInit, OnDestroy {
     let self = this;
 
     // Callbacks
-    let cbs = new pusherFnEvents();
+    let cbs = new roomFnEvents();
 
     // Getting all online users in this room
     cbs.subscription_succeeded = (members: any) => {

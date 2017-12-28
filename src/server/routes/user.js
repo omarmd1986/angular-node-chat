@@ -11,18 +11,23 @@ var guards = require('../guards');
 var pusher = require('../pusher');
 
 /**
- * Return the login user information
+ * Return the loggin user information based on the token
  */
 router.get('/me', function (req, res) {
     return res.json(req.user);
 });
 
 /**
- * Return all the rooms the user its register
+ * Return all the rooms the user is register
+ * @param limit Integer passed in form of query parameters.
+ * @param offset Integer passed in form of query parameters.
  */
 router.get('/me/rooms', function (req, res) {
     UserHasRoom
-        .myPublicRooms(req.user.id, function (err, rooms) {
+        .myPublicRooms(req.user.id, {
+            limit: req.query.limit || 50,
+            offset: req.query.offset || 0
+        }, function (err, rooms) {
             if (err) {
                 return res.status(400).json({ message: 'Unable to find the user\'s rooms' });
             }
@@ -31,71 +36,56 @@ router.get('/me/rooms', function (req, res) {
 });
 
 /**
- * 
+ * Return all the login user’s chat
+ * @param limit Integer passed in form of query parameters.
+ * @param offset Integer passed in form of query parameters.
  */
 router.get('/me/chats', function (req, res) {
     UserHasRoom
-        .myChats(req.user.id, function (err, rooms) {
+        .myChats(req.user.id, {
+            limit: req.query.limit || 50,
+            offset: req.query.offset || 0
+        }, function (err, chats) {
             if (err) {
                 return res.status(400).json({ message: 'Unable to find the user\'s chats' });
             }
-            return res.json(rooms)
+            return res.json(chats)
         });
 });
 
 /**
- * Add a room to the user
+ * Add the room to the user.
+ * @param room ID
  */
-router.post('/room/:room', guards.requiredRoom, guards.isBanned, function (req, res) {
+router.post('/room', guards.requiredRoom, guards.isBanned, function (req, res) {
     UserHasRoom.findOrCreate({
         user_id: req.user.id,
         room_id: req.room.id
-    }, function(err, userhasroom){
-        if(err){
-            return res.status(400).json({message: 'Unable to create or find a room'});
+    }, function (err, userhasroom) {
+        if (err) {
+            return res.status(400).json({ message: 'Unable to create or find a room' });
         }
         res.json(userhasroom);
     });
 });
 
 /**
- * Send the message to the room
+ * Mark the user as connected
  */
-router.post('/sent/message/:room', guards.requiredRoom, guards.isBanned, guards.isMuted, function(req, res){
-
-    // save the message
-    UserHasRoom.addMessage(req.user.id, req.params.room, { text: req.body.text }, function(err, message){
-        if (err) {
-            return res.status(400).json({ message: 'Unable to save the message' });
-        }
-
-        pusher.sendMessage(req.params.room, {
-            text: req.body.text,
-            user: req.user,
-            room: req.room,
-            date: moment(message.created_at).utc().format()
-        }, function (err, something) {
-            if (err) {
-                UserHasRoom.updateMessage(message.id, {status: 'fail'});
-                return res.status(400).json({ message: 'Unable to send the message' });
-            }
-            return res.json(message);
-        });
-    });
-});
-
 router.put('/connect', function (req, res) {
-    User.updateStatus(req.user.id, 'connected_at', function (err, userroom) {
+    User.connect(req.user.id, function (err, userroom) {
         if (err) {
-            console.log(err);
             return res.status(400).json({ message: 'Unable to change the status.' });
         }
         return res.json(true);
     });
 });
 
+/**
+ * Mark the user as disconnect
+ */
 router.put('/disconnect', function (req, res) {
-    User.updateStatus(req.user.id, 'disconnected_at', function (err, userroom) {
+    User.disconnect(req.user.id, function (err, userroom) {
         if (err) {
             return res.status(400).json({ message: 'Unable to change the status.' });
         }

@@ -27,8 +27,6 @@ var toggle = function (id, options, callback) {
 };
 
 var findAll = function (offset, limit, callback) {
-	offset = offset || 0;
-	limit = limit || 100;
 	userModel
 		.find()
 		.skip(offset)
@@ -63,10 +61,30 @@ var findOrCreate = function (data, callback) {
 	});
 }
 
+/**
+ * Change a property in the user schema
+ * @param {string} user_id 
+ * @param {string} ptr The property to change
+ * @param {funtion} callback 
+ */
 var updateStatus = function(user_id, ptr, callback){
 	let obj = new Object();
 	obj[ptr] = Date.now();
 	userModel.findByIdAndUpdate(user_id, obj, callback);
+};
+
+var connect = function(user_id, callback){
+	userModel.findByIdAndUpdate(user_id, {
+		'connected_at': Date.now(),
+		'disconnect_at': null
+	}, callback);
+};
+
+var disconnect = function(user_id, callback){
+	userModel.findByIdAndUpdate(user_id, {
+		'connected_at': null,
+		'disconnect_at': Date.now()
+	}, callback);
 };
 
 module.exports = {
@@ -77,4 +95,6 @@ module.exports = {
 	toggle,
 	findAll,
 	updateStatus,
+	connect,
+	disconnect,
 };

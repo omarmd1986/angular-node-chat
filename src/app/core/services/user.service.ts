@@ -35,6 +35,14 @@ export class UserService {
   }
 
   /**
+   * Getting the login user's chats
+   */
+  myChats(): Observable<RoomContainer>{
+    let req = this.http.get<any>(`${Config.API_URL}/user/me/chats`, this.jwt.httpOptions());
+    return this.logger.handleRequest<RoomContainer>(req, `Getting the login user's chats`, null);
+  }
+
+  /**
    * Subscribe the room to the user.
    * @param roomId 
    */
@@ -85,5 +93,10 @@ export class UserService {
   rooms(userId: string): Observable<RoomContainer> {
     let req = this.http.get<any>(`${Config.API_URL}/admin/user/${userId}/rooms`, this.jwt.httpOptions());
     return this.logger.handleRequest<RoomContainer>(req, `Getting all the users' rooms`, null);
+  }
+
+  disconnect(): Observable<any> {
+    let req = this.http.put<any>(`${Config.API_URL}/user/disconnect`, null, this.jwt.httpOptions());
+    return this.logger.handleRequest<any>(req, ``, null);
   }
 }

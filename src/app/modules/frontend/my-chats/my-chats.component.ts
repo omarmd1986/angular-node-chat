@@ -8,13 +8,14 @@ import { UserService, RoomContainer } from '../../../core/index';
 })
 export class MyChatsComponent implements OnInit {
 
-  chats: RoomContainer
+  chats: RoomContainer;
 
   constructor(
     private userSrc: UserService
   ) { }
 
   ngOnInit() {
+    this.userSrc.myChats().subscribe(chats => this.chats = chats);
   }
 
 }
