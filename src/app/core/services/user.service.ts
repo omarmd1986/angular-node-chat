@@ -47,7 +47,7 @@ export class UserService {
    * @param roomId 
    */
   addRoom(roomId: String): Observable<UserRoom> {
-    let req = this.http.post<UserRoom>(`${Config.API_URL}/user/room/${roomId}`, null, this.jwt.httpOptions());
+    let req = this.http.post<UserRoom>(`${Config.API_URL}/user/room`, {room: roomId}, this.jwt.httpOptions());
     return this.logger.handleRequest<UserRoom>(req, 'Subscribe the room to the user.', null);
   }
 
@@ -95,8 +95,19 @@ export class UserService {
     return this.logger.handleRequest<RoomContainer>(req, `Getting all the users' rooms`, null);
   }
 
+  /**
+   * Mark the loggin user as disconnect
+   */
   disconnect(): Observable<any> {
     let req = this.http.put<any>(`${Config.API_URL}/user/disconnect`, null, this.jwt.httpOptions());
+    return this.logger.handleRequest<any>(req, ``, null);
+  }
+
+  /**
+   * Mark the loggin user as connected
+   */
+  connect(): Observable<any> {
+    let req = this.http.put<any>(`${Config.API_URL}/user/connect`, null, this.jwt.httpOptions());
     return this.logger.handleRequest<any>(req, ``, null);
   }
 }

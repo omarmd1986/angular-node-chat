@@ -7,6 +7,7 @@ var moment = require('moment');
 
 var User = require('../models/user');
 var UserHasRoom = require('../models/user_has_room');
+var Chat = require('../models/chat');
 var guards = require('../guards');
 var pusher = require('../pusher');
 
@@ -41,7 +42,7 @@ router.get('/me/rooms', function (req, res) {
  * @param offset Integer passed in form of query parameters.
  */
 router.get('/me/chats', function (req, res) {
-    UserHasRoom
+    Chat
         .myChats(req.user.id, {
             limit: req.query.limit || 50,
             offset: req.query.offset || 0
