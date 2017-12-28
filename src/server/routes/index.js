@@ -10,6 +10,7 @@ var adminUserRoute = require('./admin/user');
 
 var roomRoute = require('./room');
 var adminRoomRoute = require('./admin/room');
+var modRoomRoute = require('./mod/room');
 
 var guards = require('../guards');
 var Passport = require('../auth');
@@ -31,6 +32,7 @@ var init = function (app) {
 
 	// Room endpoints
 	app.use('/api/admin/room', Passport.authenticate('jwt'), guards.isBanned, guards.admin, adminRoomRoute);
+	app.use('/api/mod/room/:room', Passport.authenticate('jwt'), guards.requiredRoom, guards.isBanned, guards.mod, modRoomRoute);
 	app.use('/api/room', Passport.authenticate('jwt'), guards.isBanned, roomRoute);
 
 	// Chat endpoints

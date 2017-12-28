@@ -61,7 +61,7 @@ router.get('/:room/messages', guards.requiredRoom, guards.isBanned, function (re
  */
 router.post('/messages', guards.requiredRoom, guards.isBanned, guards.isMuted, function (req, res) {
 
-    UserHasRoom.addMessage(req.user.id, req.room.id, {
+    UserRoomModel.addMessage(req.user.id, req.room.id, {
         text: filter.clean(req.body.text),
         status: req.room.settings.message_require_approval ? 'required_approval' : 'send'
     }, function (err, message) {
@@ -80,7 +80,7 @@ router.post('/messages', guards.requiredRoom, guards.isBanned, guards.isMuted, f
             date: moment(message.created_at).utc().format()
         }, function (err, something) {
             if (err) {
-                UserHasRoom.updateMessage(message.id, { status: 'fail' });
+                UserRoomModel.updateMessage(message.id, { status: 'fail' });
                 return res.status(400).json({ message: 'Unable to send the message' });
             }
             return res.json(message);

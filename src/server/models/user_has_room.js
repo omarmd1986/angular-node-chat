@@ -97,7 +97,7 @@ var messages = function (roomId, data, callback) {
 
 			MessageModel
 				.where('userRoom').in(Object.getOwnPropertyNames(ids))
-				.where('status').ne('required_approval')
+				.where('status').in(data.status || ['send'])
 				.sort({ created_at: -1 })
 				.skip(offset)
 				.limit(limit)
@@ -220,6 +220,12 @@ var privateMessage = function (owner, userId, callback) {
 	});
 }
 
+/**
+ * Toggle the status to send notifications in that chat.
+ * @param {string} user_id 
+ * @param {string} room_id 
+ * @param {function} callback 
+ */
 var silence = function (user_id, room_id, callback) {
 	findOrCreate({
 		user_id: user_id,
@@ -272,6 +278,19 @@ var roomModerators = function (room_id, data, callback) {
 		});
 };
 
+var toggleForbidden = function(room_id, user_id, ptr, callback){
+	findOrCreate({
+		user_id: user_id,
+		room_id: room_id
+	}, function (err, user_room) {
+		if (err) {
+			return callback(err);
+		}
+		user_room.toggle(ptr);
+		user_room.save(callback);
+	});
+};
+
 module.exports = {
 	create,
 	findOrCreate,
@@ -284,4 +303,5 @@ module.exports = {
 	silence,
 	changeModerator,
 	roomModerators,
+	toggleForbidden,
 };

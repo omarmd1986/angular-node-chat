@@ -94,6 +94,21 @@ module.exports = {
             return next();
         }
         return res.status(403).json({ message: "You cannot hava access to this resource." });
+    },
+
+    mod: function (req, res, next) {
+        if (req.user.is_admin) {
+            // admin can access no matter what
+            return next();
+        }
+        userRoomModel
+            .findOrCreate({}, function (err, usermodel) {
+                if (err) { return res.status(400).json({ message: "Something went wrong." }); }
+                if (!usermodel.is_mod) {
+                    return res.status(403).json({ message: "You cannot hava access to this resource." });
+                }
+                next();
+            });
     }
 
 }

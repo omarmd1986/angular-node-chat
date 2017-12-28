@@ -39,6 +39,12 @@ UserSchema.methods.toggleUpdates = function(property){
     return this;
 };
 
+UserSchema.methods.toggle = function(property){
+    this.forbidden[property] = !this.forbidden[property];
+    this.markModified('forbidden');
+    return this;
+};
+
 // Virtual Properties
 userHasRoomsSchema.virtual('is_banned').get(function(){
     return this.forbidden.is_ban;
