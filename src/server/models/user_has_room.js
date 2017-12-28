@@ -97,6 +97,7 @@ var messages = function (roomId, data, callback) {
 
 			MessageModel
 				.where('userRoom').in(Object.getOwnPropertyNames(ids))
+				.where('status').ne('required_approval')
 				.sort({ created_at: -1 })
 				.skip(offset)
 				.limit(limit)
@@ -122,7 +123,9 @@ var messages = function (roomId, data, callback) {
  * @param {*} roomId 
  * @param {*} callback 
  */
-var users = function (roomId, callback) {
+var users = function (roomId, data, callback) {
+	let limit = parseInt(data.limit),
+		offset = parseInt(data.offset);
 	UserRoomModel
 		.where('room').equals(roomId)
 		.populate('room', 'icon', { 'settings.is_active': true, 'deleted_at': null })
@@ -139,6 +142,8 @@ var users = function (roomId, callback) {
 			// Taking the IDS
 			let users = [];
 			actives.map((r, index) => { users[index] = r.user });
+
+			users.splice(offset, limit);
 
 			return callback(err, users);
 		});
@@ -215,6 +220,58 @@ var privateMessage = function (owner, userId, callback) {
 	});
 }
 
+var silence = function (user_id, room_id, callback) {
+	findOrCreate({
+		user_id: user_id,
+		room_id: room_id
+	}, function (err, user_room) {
+		if (err) {
+			return callback(err);
+		}
+		user_room.toggleUpdates();
+		user_room.save(callback);
+	});
+};
+
+/**
+ * Activate or not the moderator mode in a room
+ * @param {string} room_id 
+ * @param {string} user_id 
+ * @param {boolean} value 
+ * @param {function} callback 
+ */
+var changeModerator = function (room_id, user_id, value, callback) {
+	findOrCreate({
+		user_id: user_id,
+		room_id: room_id
+	}, function (err, userroom) {
+		if (err) { return callback(err); }
+		userroom.is_mod = value;
+		userroom.save(callback)
+	});
+};
+
+var roomModerators = function (room_id, data, callback) {
+	let limit = parseInt(data.limit),
+		offset = parseInt(data.offset);
+	UserRoomModel
+		.where('room').equals(room_id)
+		.where('id_mod').equals(true)
+		.populate('room', 'icon', { 'deleted_at': null })
+		.populate('user')
+		.limit(limit)
+		.skip(offset)
+		.select('user')
+		.exec(function (err, usermodel) {
+			if (err) { return callback(err); }
+
+			let users = [];
+			usermodel.map((r, index) => { users[index] = r.user });
+
+			return callback(err, users);
+		});
+};
+
 module.exports = {
 	create,
 	findOrCreate,
@@ -224,4 +281,7 @@ module.exports = {
 	addMessage,
 	updateMessage,
 	privateMessage,
+	silence,
+	changeModerator,
+	roomModerators,
 };

@@ -28,8 +28,8 @@ router.get('/:room?', guards.room, guards.isBanned, function (req, res) {
         fn(null, req.room);
     } else {
         RoomModel.allPublicRooms({
-            limit: req.query.limit,
-            offset: data.query.offset
+            limit: req.query.limit || 50,
+            offset: data.query.offset || 0
         }, fn);
     }
 });
@@ -88,8 +88,17 @@ router.post('/messages', guards.requiredRoom, guards.isBanned, guards.isMuted, f
     });
 });
 
+/**
+ * Toggle the receive or not updates from this room to the login user.
+ */
 router.put('/:room/toggle/silence', function(req, res){
-
+    UserRoomModel
+        .silence(req.user.id, req.params.room, function(err, usermodel){
+            if (err) {
+                return res.status(400).json({ message: 'Unable to silence the room' });
+            }
+            res.json(usermodel.settings.recive_updates);
+        });
 });
 
 module.exports = router;

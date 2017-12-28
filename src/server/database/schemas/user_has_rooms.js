@@ -32,6 +32,13 @@ userHasRoomsSchema.methods.addMessage = function(message){
     return this.messages.push(message);
 }
 
+// Methods
+UserSchema.methods.toggleUpdates = function(property){
+    this.settings.recive_updates = !this.settings.recive_updates;
+    this.markModified('settings');
+    return this;
+};
+
 // Virtual Properties
 userHasRoomsSchema.virtual('is_banned').get(function(){
     return this.forbidden.is_ban;

@@ -46,18 +46,22 @@ var allPublicRooms = function (data, callback) {
 		.where('settings.is_active').equals(true)
 		.where('settings.is_private').equals(false)
 		.limit(data.limit)
-		.skip(data.skip)
+		.skip(data.offset)
 		.exec(callback);
 };
 
 /**
  * For admins
  * */
-var allRooms = function (callback) {
-	roomModel.
-		where('deleted_at').equals(null).
-		where('settings.is_private').equals(false).
-		exec(callback);
+var allRooms = function (data, callback) {
+	let limit = parseInt(data.limit),
+		offset = parseInt(data.offset);
+	roomModel
+		.where('deleted_at').equals(null)
+		.where('settings.is_private').equals(false)
+		.limit(limit)
+		.skip(offset)
+		.exec(callback);
 };
 
 module.exports = {
