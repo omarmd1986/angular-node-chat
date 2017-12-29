@@ -25,25 +25,26 @@ var create = function (data, callback) {
 var findOrCreate = function (data, callback) {
 	UserRoomModel.findOne({
 		$or: [
-			{ $and: [{user: data.user_id, from: data.from_id}] },
-			{ $and: [{user: data.from_id, from: data.user_id}] },
+			{ $and: [{ user: data.user_id, from: data.from_id }] },
+			{ $and: [{ user: data.from_id, from: data.user_id }] },
 		]
 	})
 		.populate('user')
 		.populate('from')
-		.exec(function (err, user_room) {
+		.exec(function (err, chat) {
 			if (err) { return callback(err); }
-			if (user_room) {
-				return callback(err, user_room);
+			if (chat) {
+				return callback(err, chat);
 			} else {
-				var userRoomData = {
+				var chatData = {
 					user: data.user_id,
 					from: data.from_id
 				};
-				create(userRoomData, callback);
+				create(chatData, callback);
 			}
 		});
 }
+
 
 /**
  * 
@@ -71,54 +72,35 @@ var myChats = function (id, data, callback) {
 		.exec(callback);
 };
 
-// /**
-//  * Return all the messages posted(approved)
-//  * @param {string} roomId 
-//  * @param {object} data 
-//  * @param {function} callback 
-//  */
-// var messages = function (roomId, data, callback) {
-// 	let offset = parseInt(data.offset),
-// 		limit = parseInt(data.limit);
-// 	UserRoomModel
-// 		.where('room').equals(roomId)
-// 		.populate('room', 'title description icon', { 'settings.is_active': true, 'deleted_at': null })
-// 		.populate('user', 'username picture')
-// 		.select('room user')
-// 		.exec(function (err, result) {
-// 			if (err) {
-// 				return callback(err);
-// 			}
-// 			// Filter by active..
-// 			// Filter by is_private is false or the user has access to the room
-// 			let actives = result.filter(r => (r.room !== null));
+/**
+ * Return all the messages
+ * @param {string} roomId 
+ * @param {object} data 
+ * @param {function} callback 
+ */
+var messages = function (chatId, data, callback) {
+	let offset = parseInt(data.offset),
+		limit = parseInt(data.limit);
 
-// 			// Taking the IDS
-// 			let ids = {};
-// 			let room_ = null; // Saving the room
-// 			actives.map((r, index) => { ids[r.id] = r.user; room_ = r.room; });
+	MessageModel
+		.where('userRoom').equals(chatId)
+		.populate('user')
+		.populate('from')
+		.sort({ created_at: -1 })
+		.skip(offset)
+		.limit(limit)
+		.lean() // Return simple javascript objects.
+		.exec(function (err, messages) {
+			if (err) { return callback(err); }
 
-// 			MessageModel
-// 				.where('userRoom').in(Object.getOwnPropertyNames(ids))
-// 				.sort({ created_at: -1 })
-// 				.skip(offset)
-// 				.limit(limit)
-// 				.lean() // Return simple javascript objects.
-// 				.exec(function (err, messages) {
-// 					if (err) {
-// 						return callback(err);
-// 					}
-// 					//Filling importan properties
-// 					messages.forEach(m => {
-// 						m.user = ids[m.userRoom];
-// 						m.room = room_;
-// 						m.date = moment(m.created_at).utc().format();
-// 					});
-// 					messages.reverse();
-// 					callback(err, messages);
-// 				});
-// 		});
-// };
+			//Filling importan properties
+			messages.forEach(m => { m.date = moment(m.created_at).utc().format(); });
+
+			messages.reverse();
+
+			callback(err, messages);
+		});
+};
 
 // /**
 //  * 
@@ -147,38 +129,36 @@ var myChats = function (id, data, callback) {
 // 		});
 // };
 
-// /**
-//  * Add a message to the room
-//  * @param {string} user_id 
-//  * @param {string} room_id 
-//  * @param {object} data The Message Model
-//  * @param {function} callback 
-//  */
-// var addMessage = function (user_id, room_id, data, callback) {
+/**
+ * Add a message to the room
+ * @param {string} user_id 
+ * @param {string} from_id 
+ * @param {object} data The Message Model
+ * @param {function} callback 
+ */
+var addMessage = function (user_id, from_id, data, callback) {
 
-// 	findOrCreate({
-// 		user_id: user_id,
-// 		room_id: room_id
-// 	}, function (err, user_room) {
-// 		if (err) {
-// 			return callback(err);
-// 		}
-// 		let message = new MessageModel(data);
-// 		message.userRoom = user_room;
-// 		message.save(callback);
-// 	});
-// };
+	findOrCreate({
+		user_id: user_id,
+		from_id: room_id
+	}, function (err, chat) {
+		if (err) { return callback(err); }
+		let message = new MessageModel(data);
+		message.userRoom = chat;
+		message.save(callback);
+	});
+};
 
-// /**
-//  * 
-//  * @param {*} message_id 
-//  * @param {*} data 
-//  * @param {*} callback 
-//  */
-// var updateMessage = function (message_id, data, callback) {
-// 	MessageModel
-// 		.findByIdAndUpdate(message_id, data, callback);
-// };
+/**
+ * 
+ * @param {*} message_id 
+ * @param {*} data 
+ * @param {*} callback 
+ */
+var updateMessage = function (message_id, data, callback) {
+	MessageModel
+		.findByIdAndUpdate(message_id, data, callback);
+};
 
 // /**
 //  * Is like personal chat between two people
@@ -222,9 +202,9 @@ module.exports = {
 	create,
 	findOrCreate,
 	myChats,
-	// messages,
+	messages,
 	// users,
-	// addMessage,
-	// updateMessage,
+	addMessage,
+	updateMessage,
 	// privateMessage,
 };

@@ -73,8 +73,8 @@ router.post('/messages', guards.requiredRoom, guards.isBanned, guards.isMuted, f
             return res.json(message);
         }
         
-        pusher.sendMessage(req.room.id, {
-            text: req.body.text,
+        pusher.sendMessage(req.room, {
+            text: filter.clean(req.body.text),
             user: req.user,
             room: req.room,
             date: moment(message.created_at).utc().format()

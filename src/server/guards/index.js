@@ -2,6 +2,7 @@
 
 let roomModel = require('../models/room');
 let userRoomModel = require('../models/user_has_room');
+let chatModel = require('../database').models.user_has_room;
 
 let roomFn = function (required, req, res, next) {
     let id = req.params.room || req.body.room || req.query.room;
@@ -109,6 +110,25 @@ module.exports = {
                 }
                 next();
             });
+    },
+
+    chat: function (req, res, next) {
+        let chatId = req.params.chat || req.body.chat || req.query.chat;
+        chatModel.findOne({
+            $and: [
+                { _id: chatId },
+                {
+                    $or: [
+                        { user: req.user.id },
+                        { from: req.user.id }
+                    ]
+                }
+            ]
+        }, function (err, chat) {
+            if (err) { return res.status(400).json({ message: 'Chat not found!' }) }
+            req.chat = chat;
+            next();
+        });
     }
 
 }

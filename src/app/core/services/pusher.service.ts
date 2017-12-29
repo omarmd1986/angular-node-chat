@@ -4,7 +4,7 @@ import Pusher from 'pusher-js';
 import { Config } from "../config/config";
 import { JwtHandlerService } from "./jwt-handler.service";
 import { UserService } from "./user.service";
-import { PusherMessage } from "../models/pusher-message";
+import { PusherMessage, PusherRoomBannedMessage, PusherNewRoomMessage, PusherNewChatMessage } from "../models/pusher-message";
 import { LoginUser } from '../models/login-user';
 
 export class pusherFnEvents {
@@ -14,12 +14,16 @@ export class pusherFnEvents {
   member_remove: (member: any) => any;
 }
 
-export class roomFnEvents extends pusherFnEvents{
+export class roomFnEvents extends pusherFnEvents {
   message_event: (data: PusherMessage) => any;
 }
 
-export class systemFnEvents extends pusherFnEvents{
+export class systemFnEvents extends pusherFnEvents {
   banned_event: () => any;
+  banned_room_event: (event: PusherRoomBannedMessage) => any;
+
+  new_chat_message_event: (event: PusherNewChatMessage) => any;
+  new_room_message_event: (event: PusherNewRoomMessage) => any;
 
   //keep going adding more events
   // Ex new message in a chat, new message in a room, user was banned from the server or the room
@@ -43,8 +47,8 @@ export class PusherService {
 
   closeChannel(channel: any): void {
     this.pusher.unsubscribe(channel.name);
-    if(channel.name.split('-')[2] == 'system'){
-      this.userSrc.disconnect().subscribe(_ => {});
+    if (channel.name.split('-')[2] == 'system') {
+      this.userSrc.disconnect().subscribe(_ => { });
     }
   }
 
@@ -86,6 +90,9 @@ export class PusherService {
 
     // Binding custom events
     channelObj.bind('banned', fns.banned_event);
+    channelObj.bind('banned_room', fns.banned_room_event);
+    channelObj.bind('new_chat_message', fns.new_chat_message_event);
+    channelObj.bind('new_room_message', fns.new_room_message_event);
 
     return channelObj;
   }
