@@ -2,9 +2,10 @@
 
 let roomModel = require('../models/room');
 let userRoomModel = require('../models/user_has_room');
+let chatModel = require('../database').models.user_has_room;
 
 let roomFn = function (required, req, res, next) {
-    let id = req.params.room;
+    let id = req.params.room || req.body.room || req.query.room;
     if (!id) {
         return required
             ? res.status(404).json({ message: "Room not found." })
@@ -94,6 +95,40 @@ module.exports = {
             return next();
         }
         return res.status(403).json({ message: "You cannot hava access to this resource." });
+    },
+
+    mod: function (req, res, next) {
+        if (req.user.is_admin) {
+            // admin can access no matter what
+            return next();
+        }
+        userRoomModel
+            .findOrCreate({}, function (err, usermodel) {
+                if (err) { return res.status(400).json({ message: "Something went wrong." }); }
+                if (!usermodel.is_mod) {
+                    return res.status(403).json({ message: "You cannot hava access to this resource." });
+                }
+                next();
+            });
+    },
+
+    chat: function (req, res, next) {
+        let chatId = req.params.chat || req.body.chat || req.query.chat;
+        chatModel.findOne({
+            $and: [
+                { _id: chatId },
+                {
+                    $or: [
+                        { user: req.user.id },
+                        { from: req.user.id }
+                    ]
+                }
+            ]
+        }, function (err, chat) {
+            if (err) { return res.status(400).json({ message: 'Chat not found!' }) }
+            req.chat = chat;
+            next();
+        });
     }
 
 }

@@ -14,7 +14,7 @@ import { LoginModule, LoginComponent, LoginCallbackComponent, LogoutComponent } 
 import { DashboardModule, DashboardComponent } from "./modules/dashboard/index";
 
 // Frontend Module
-import { FrontendModule, SecureComponent, RoomsComponent, RoomComponent } from "./modules/frontend/index";
+import { FrontendModule, SecureComponent, RoomsComponent, RoomComponent, MyChatsComponent } from "./modules/frontend/index";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -28,7 +28,10 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'rooms', component: RoomsComponent },
-      { path: 'room/:id', component: RoomComponent }
+      { path: 'room/:id', component: RoomComponent },
+
+      { path: 'chats', component: MyChatsComponent },
+      // { path: 'chat/:id', component: RoomComponent }
     ]
   },
   // 404 page redirect to dashboard to
@@ -37,10 +40,8 @@ const routes: Routes = [
 
 const items: Item[] = [
   {text: 'Dashboard', icon: 'glyphicon glyphicon-home', href:'/dashboard', childs:[]},
-  {text: 'Rooms', icon: 'glyphicon glyphicon-oil', href:'/rooms', childs:[]},
-  {text: 'Settings', icon: 'glyphicon glyphicon-cog', href:'', childs:[
-    {text: 'Password', href:'/password', icon:'glyphicon glyphicon-leaf'}
-  ]}
+  {text: 'Rooms', icon: 'glyphicon glyphicon-align-justify', href:'/rooms', childs:[]},
+  {text: 'My Chats', icon: 'glyphicon glyphicon-envelope', href:'/chats', childs:[]},
 ];
 
 @NgModule({

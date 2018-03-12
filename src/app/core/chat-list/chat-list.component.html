@@ -1,0 +1,26 @@
+<div class="dropdown" *ngFor="let chat of _chats">
+  <div class="media" [title]="chat.title" data-toggle="dropdown"
+    role="button" aria-haspopup="true" aria-expanded="false">
+    <div class="media-middle media-left">
+      <a (click)="click(chat)">
+        <img class="media-object img-circle" title="{{ chat.title }}" width="30" src="{{ chat.icon }}">
+      </a>
+    </div>
+
+    <div class="media-body">
+      <b class="visible-sm-inline visible-md-inline visible-lg-inline">{{ chat.titlle }}</b>
+    </div>
+
+    <div *ngIf="_actions && _actions.lenght() > 0" class="media-middle media-right">
+      <span class="caret"></span>
+    </div>
+  </div>
+  
+  <ul *ngIf="_actions && _actions.lenght() > 0" class="dropdown-menu">
+    <li *ngFor="let act of _actions" [ngClass]="{'divider': act.type == ActionType.separator}">
+      <a *ngIf="act.type == ActionType.link" routerLink="{{ act.url }}">{{ act.text }}</a>
+      <a *ngIf="act.type == ActionType.action" (click)="act.fn($event, user)">{{ act.text }}</a>
+    </li>
+  </ul>
+
+</div>

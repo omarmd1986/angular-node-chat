@@ -1,3 +1,6 @@
+import { Container } from "./container";
+import { LoginUser } from "./login-user";
+
 export class Room {
     title: string;
     description: string;
@@ -16,9 +19,15 @@ export class Room {
 
 }
 
+export class RoomContainer extends Container<Room>{
+
+}
+
 export class UserRoom {
     _id: string;
-    room: Room;
+    room: Room; // If is a chat room
+    user: LoginUser; 
+    from: LoginUser;// If is a private chat
     settings: any;
     forbidden: any;
     is_mod: boolean;

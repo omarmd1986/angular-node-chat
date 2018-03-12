@@ -35,22 +35,33 @@ var toggle = function (id, options, callback) {
 	});
 };
 
-var allPublicRooms = function (callback) {
-	roomModel.
-		where('deleted_at').equals(null).
-		where('settings.is_active').equals(true).
-		where('settings.is_private').equals(false).
-		exec(callback);
+/**
+ * Return all the public room in the system
+ * @param {object} data 
+ * @param {function} callback 
+ */
+var allPublicRooms = function (data, callback) {
+	roomModel
+		.where('deleted_at').equals(null)
+		.where('settings.is_active').equals(true)
+		.where('settings.is_private').equals(false)
+		.limit(data.limit)
+		.skip(data.offset)
+		.exec(callback);
 };
 
 /**
  * For admins
  * */
-var allRooms = function (callback) {
-	roomModel.
-		where('deleted_at').equals(null).
-		where('settings.is_private').equals(false).
-		exec(callback);
+var allRooms = function (data, callback) {
+	let limit = parseInt(data.limit),
+		offset = parseInt(data.offset);
+	roomModel
+		.where('deleted_at').equals(null)
+		.where('settings.is_private').equals(false)
+		.limit(limit)
+		.skip(offset)
+		.exec(callback);
 };
 
 module.exports = {

@@ -23,6 +23,7 @@
     "@angular/router": "^5.0.0",
     "@toverux/ngx-sweetalert2": "^3.0.1",
     "animate.css": "^3.5.2",
+    "bad-words": "^1.6.1",
     "body-parser": "~1.18.2",
     "bootstrap": "3.3.7",
     "bootstrap-social": "5.1.1",
